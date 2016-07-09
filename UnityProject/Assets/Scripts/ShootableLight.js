@@ -13,9 +13,11 @@ function WasShot(obj : GameObject, pos : Vector3, vel : Vector3) {
 	if(!destroyed){
 		destroyed = true;
 		light_amount = 0.0;
-		Instantiate(destroy_effect, transform.FindChild("bulb").position, Quaternion.identity);
+		var bla : GameObject = Instantiate(destroy_effect, transform.FindChild("bulb").position, Quaternion.identity) as GameObject;
+						Time.timeScale =0.0;
+		print("hellof? " + bla.name);
 	}
-	if(obj && obj.collider && obj.collider.material.name == "glass (Instance)"){
+	if(obj && obj.GetComponent.<Collider>() && obj.GetComponent.<Collider>().material.name == "glass (Instance)"){
 		GameObject.Destroy(obj);
 	}
 }
@@ -43,7 +45,7 @@ function Update () {
 
 	var combined_color = Color(light_color.r * light_amount,light_color.g * light_amount,light_color.b * light_amount);
 	for(var light : Light in gameObject.GetComponentsInChildren(Light)){
-		light.color = combined_color;
+		light.color = Color.white;
 	}
 	for(var renderer : MeshRenderer in gameObject.GetComponentsInChildren(MeshRenderer)){
 		renderer.material.SetColor("_Illum", combined_color);
