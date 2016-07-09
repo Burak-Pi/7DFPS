@@ -70,7 +70,13 @@
      <Compile Include="Assets\Scripts\Scripts C#\FPSInputController.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\FlashlightScript.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\GUISkinHolder.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\Level Script.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\LevelCreatorScript.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\MagScript.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\MusicScript.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\MuzzleFlashScript.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\PlasterPuffScript.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\PlatformInputController.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\References.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\ShootableLight.cs" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlendOneOne.shader" />
