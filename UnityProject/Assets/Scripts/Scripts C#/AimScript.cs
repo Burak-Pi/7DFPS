@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AimScript : MonoBehaviour {
 // Prefabs 
@@ -36,11 +37,7 @@ bool disable_springs, disable_recoil = true;
 // Private variables
 
 public class Spring {
-float state;
-float target_state;
-float vel;
-float strength;
-float damping; 
+public float state,  target_state, vel, strength, damping; 
 
 	public Spring ( float state,   float target_state ,   float strength ,   float damping  ){
 		this.Set(state, target_state, strength, damping); 
@@ -77,121 +74,119 @@ private Quaternion flashlight_aim_rot;
 		private Spring flash_ground_pose_spring= new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
 		private Vector3 flash_ground_pos;
 
-		private var rotation_x_leeway = 0;
-		private var rotation_y_min_leeway = 0;
-		private var rotation_y_max_leeway = 0;
-		private var kRotationXLeeway = 5.0;
-		private var kRotationYMinLeeway = 20;
-		private var kRotationYMaxLeeway = 10;
+		private float rotation_x_leeway = 0;
+		private float rotation_y_min_leeway = 0;
+		private float rotation_y_max_leeway = 0;
+		private float kRotationXLeeway = 5;
+		private float kRotationYMinLeeway = 20;
+		private float kRotationYMaxLeeway = 10;
 
-		private var rotation_x = 0;
-		private var rotation_y = 0;
-		private var view_rotation_x = 0;
-		private var view_rotation_y = 0;
+		private float rotation_x = 0;
+		private float rotation_y = 0;
+		private float view_rotation_x = 0;
+		private float view_rotation_y = 0;
 
-		private var kRecoilSpringStrength = 800;
-		private var kRecoilSpringDamping = 0.000001;
-		private var x_recoil_spring = new Spring(0,0,kRecoilSpringStrength,kRecoilSpringDamping);
-		private var y_recoil_spring = new Spring(0,0,kRecoilSpringStrength,kRecoilSpringDamping);
-		private var head_recoil_spring_x = new Spring(0,0,kRecoilSpringStrength,kRecoilSpringDamping);
-		private var head_recoil_spring_y = new Spring(0,0,kRecoilSpringStrength,kRecoilSpringDamping);
+		private float kRecoilSpringStrength = 800;
+		private float kRecoilSpringDamping = 0.000001;
+		private Spring x_recoil_spring = new Spring(0,0,kRecoilSpringStrength,kRecoilSpringDamping);
+		private Spring y_recoil_spring = new Spring(0,0,kRecoilSpringStrength,kRecoilSpringDamping);
+		private Spring head_recoil_spring_x = new Spring(0,0,kRecoilSpringStrength,kRecoilSpringDamping);
+		private Spring head_recoil_spring_y = new Spring(0,0,kRecoilSpringStrength,kRecoilSpringDamping);
 
-		private var mag_pos : Vector3;
-		private var mag_rot : Quaternion;
+		private Vector3 mag_pos;
+		private Quaternion mag_rot;
 
-		private var magazine_instance_in_hand:GameObject;
-		private var kGunDistance = 0.3;
+		private GameObject magazine_instance_in_hand;
+		private float kGunDistance = 0.3;
 
-		private var slide_pose_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
-		private var reload_pose_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
-		private var press_check_pose_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
-		private var inspect_cylinder_pose_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
-		private var add_rounds_pose_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
-		private var eject_rounds_pose_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
+		private Spring slide_pose_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
+		private Spring reload_pose_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
+		private Spring press_check_pose_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
+		private Spring inspect_cylinder_pose_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
+		private Spring add_rounds_pose_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
+		private Spring eject_rounds_pose_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
 
 		enum GunTilt {LEFT, CENTER, RIGHT};
-		private var gun_tilt : GunTilt = GunTilt.CENTER;
+		private GunTilt gun_tilt = GunTilt.CENTER;
 
-		private var hold_pose_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
-		private var mag_ground_pose_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
+		private Spring hold_pose_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
+		private Spring mag_ground_pose_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
 
-		private var left_hand_occupied = false;
-		private var kMaxHeadRecoil = 10;
-		private var head_recoil_delay : float[] = new float[kMaxHeadRecoil];
-		private var next_head_recoil_delay = 0;
-		private var mag_ground_pos : Vector3;
-		private var mag_ground_rot : Quaternion;
+		private bool left_hand_occupied = false;
+		private float kMaxHeadRecoil = 10;
+		private float[] head_recoil_delay = new float[kMaxHeadRecoil];
+		private float next_head_recoil_delay = 0;
+		private Vector3 mag_ground_pos;
+		private Quaternion mag_ground_rot;
 
 		enum HandMagStage {HOLD, HOLD_TO_INSERT, EMPTY};
-		private var mag_stage = HandMagStage.EMPTY;
+		private HandMagStage mag_stage = HandMagStage.EMPTY;
 
-		private var collected_rounds = new Array();
+		private List<GameObject> collected_rounds = new List<GameObject>();
 
-		private var target_weapon_slot = -2;
-		private var queue_drop = false;
-		private var loose_bullets : Array;
-		private var loose_bullet_spring : Array;
-		private var show_bullet_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
-		private var picked_up_bullet_delay = 0;
+		private int target_weapon_slot = -2;
+		private bool queue_drop = false;
+		private List<GameObject> loose_bullets = new List<GameObject>();
+		private List<Spring> loose_bullet_spring = new List<Spring>();
+		private Spring show_bullet_spring = new Spring(0,0,kAimSpringStrength, kAimSpringDamping);
+		private float picked_up_bullet_delay = 0;
 
-		private var head_fall = 0;
-		private var head_fall_vel = 0;
-		private var head_tilt = 0;
-		private var head_tilt_vel = 0;
-		private var head_tilt_x_vel = 0;
-		private var head_tilt_y_vel = 0;
-		private var dead_fade = 1.0;
-		private var win_fade = 0;
-		private var dead_volume_fade = 0;
-		private var dead_body_fell = false;
+		private float head_fall = 0;
+		private float head_fall_vel = 0;
+		private float head_tilt = 0;
+		private float head_tilt_vel = 0;
+		private float head_tilt_x_vel = 0;
+		private float head_tilt_y_vel = 0;
+		private float dead_fade = 1;
+		private float win_fade = 0;
+		private float dead_volume_fade = 0;
+		private bool dead_body_fell = false;
 
-		private var start_tape_delay = 0;
-		private var stop_tape_delay = 0;
-		private var tapes_heard = new Array();
-		private var tapes_remaining = new Array();
-		private var total_tapes = new Array();
-		private var tape_in_progress = false;
-		private var unplayed_tapes = 0;
+		private float start_tape_delay = 0;
+		private float stop_tape_delay = 0;
+		private List<AudioClip> tapes_heard = new List<AudioClip>();
+		private List<AudioClip> tapes_remaining = new List<AudioClip>();
+		private List<AudioClip> total_tapes = new List<AudioClip>();
+		private bool tape_in_progress = false;
+		private float unplayed_tapes = 0;
 
-		private var god_mode = false;
-		private var slomo_mode = false;
-		private var iddqd_progress = 0;
-		private var idkfa_progress = 0;
-		private var slomo_progress = 0;
-		private var cheat_delay = 0;
-		private var level_reset_hold = 0;
+		private bool god_mode = false;
+		private bool slomo_mode = false;
+		private float iddqd_progress = 0;
+		private float idkfa_progress = 0;
+		private float slomo_progress = 0;
+		private float cheat_delay = 0;
+		private float level_reset_hold = 0;
 
 		enum WeaponSlotType {GUN, MAGAZINE, FLASHLIGHT, EMPTY, EMPTYING};
 
 		class WeaponSlot {
-				var obj:GameObject = null;
-				var type:WeaponSlotType = WeaponSlotType.EMPTY;
-				var start_pos : Vector3 = Vector3(0,0,0);
-				var start_rot : Quaternion = Quaternion.identity;
-				var spring = new Spring(1,1,100,0.000001);
-		};
+				GameObject obj = null;
+				WeaponSlotType type = WeaponSlotType.EMPTY;
+				Vector3 start_pos  = Vector3.zero;
+				Quaternion start_rot = Quaternion.identity;
+				Spring spring = new Spring(1,1,100,0.000001f);
+		}
 
-		private var weapon_slots : WeaponSlot[] = new WeaponSlot[10];
+		private WeaponSlot[] weapon_slots = new WeaponSlot[10];
 
-		private var health = 1.0;
-		private var dying = false;
-		private var dead = false;
-		private var won = false;
+		private float health = 1;
+		private bool dying, dead, won;
 
-		function IsAiming() : boolean {
+		bool IsAiming() {
 				return (gun_instance != null && aim_spring.target_state == 1.0);
 		}
 
-		function IsDead() : boolean {
+		bool IsDead() {
 				return dead;
 		}
 
-		function StepRecoil(amount : float) {
+		void StepRecoil(float amount) {
 				x_recoil_spring.vel += Random.Range(100,400) * amount;
 				y_recoil_spring.vel += Random.Range(-200,200) * amount;
 		}
 
-		function WasShot(){
+		void WasShot(){
 				head_recoil_spring_x.vel += Random.Range(-400,400);
 				head_recoil_spring_y.vel += Random.Range(-400,400);
 				x_recoil_spring.vel += Random.Range(-400,400);
@@ -209,7 +204,7 @@ private Quaternion flashlight_aim_rot;
 				}
 		}
 
-		function FallDeath(vel : Vector3) {
+		void FallDeath(Vector3 vel) {
 				if(!god_mode && !won){
 						SetDead(true);
 						head_fall_vel = vel.y;
@@ -219,12 +214,12 @@ private Quaternion flashlight_aim_rot;
 				}
 		}
 
-		function InstaKill() {
+		void InstaKill() {
 				SetDead(true);
-				dead_fade = 1.0;
+				dead_fade = 1;
 		}
 
-		function Shock() {
+		void Shock() {
 				if(!god_mode && !won){
 						if(!dead){
 								PlaySoundFromGroup(sound_electrocute, 1.0);
@@ -235,7 +230,7 @@ private Quaternion flashlight_aim_rot;
 				head_recoil_spring_y.vel += Random.Range(-400,400);
 		}
 
-		function SetDead(new_dead : boolean) {
+		void SetDead(bool new_dead) {
 				if(new_dead == dead){
 						return;
 				}
@@ -247,7 +242,7 @@ private Quaternion flashlight_aim_rot;
 						head_tilt = 0;
 						head_fall = 0;
 				} else {
-						GetComponent(MusicScript).HandleEvent(MusicEvent.DEAD);
+						GetComponent<MusicScript>().HandleEvent(MusicEvent.DEAD);
 						head_tilt_vel = Random.Range(-100,100);
 						head_tilt_x_vel = Random.Range(-100,100);
 						head_tilt_y_vel = Random.Range(-100,100);
@@ -257,22 +252,22 @@ private Quaternion flashlight_aim_rot;
 				}
 		}
 
-		function PlaySoundFromGroup(group : Array, volume : float){
-				var which_shot = Random.Range(0,group.length);
-				GetComponent.<AudioSource>().PlayOneShot(group[which_shot], volume * PlayerPrefs.GetFloat("sound_volume", 1.0));
+		void PlaySoundFromGroup(List<AudioClip> group, float volume){
+				int which_shot = Random.Range(0,(group.Count-1));
+				GetComponent<AudioSource>().PlayOneShot(group[which_shot], volume * PlayerPrefs.GetFloat("sound_volume", 1.0));
 		}
 
-		function AddLooseBullet(spring:boolean) {
-				loose_bullets.push(Instantiate(casing_with_bullet));
+		void AddLooseBullet(bool spring) {
+				loose_bullets.Add(Instantiate(casing_with_bullet));
 				var new_spring = new Spring(0.3,0.3,kAimSpringStrength,kAimSpringDamping);
-				loose_bullet_spring.push(new_spring);
+				loose_bullet_spring.Add(new_spring);
 				if(spring){
-						new_spring.vel = 3.0;
-						picked_up_bullet_delay = 2.0;
+						new_spring.vel = 3;
+						picked_up_bullet_delay = 2;
 				}
 		}
 
-		function Start() { 
+		void Start() { 
 				disable_springs = false; 
 				disable_recoil = true;
 				holder = GameObject.Find("gui_skin_holder").GetComponent(GUISkinHolder);
@@ -298,7 +293,7 @@ private Quaternion flashlight_aim_rot;
 				main_camera = GameObject.Find("Main Camera").gameObject;
 				character_controller = GetComponent(CharacterController);
 				for(var i=0; i<kMaxHeadRecoil; ++i){
-						head_recoil_delay[i] = -1.0;
+						head_recoil_delay[i] = -1;
 				}
 				for(i=0; i<10; ++i){
 						weapon_slots[i] = new WeaponSlot();
@@ -423,8 +418,8 @@ private Quaternion flashlight_aim_rot;
 								holder.has_flashlight = true;
 								flash_ground_pos = held_flashlight.transform.position;
 								flash_ground_rot = held_flashlight.transform.rotation;
-								flash_ground_pose_spring.state = 1.0;
-								flash_ground_pose_spring.vel = 1.0;
+								flash_ground_pose_spring.state = 1;
+								flash_ground_pose_spring.vel = 1;
 						}
 				}
 				if(nearest_mag && mag_stage == HandMagStage.EMPTY){
@@ -432,11 +427,11 @@ private Quaternion flashlight_aim_rot;
 						Destroy(magazine_instance_in_hand.GetComponent.<Rigidbody>());
 						mag_ground_pos = magazine_instance_in_hand.transform.position;
 						mag_ground_rot = magazine_instance_in_hand.transform.rotation;
-						mag_ground_pose_spring.state = 1.0;
-						mag_ground_pose_spring.vel = 1.0;
-						hold_pose_spring.state = 1.0;
+						mag_ground_pose_spring.state = 1;
+						mag_ground_pose_spring.vel = 1;
+						hold_pose_spring.state = 1;
 						hold_pose_spring.vel = 0;
-						hold_pose_spring.target_state = 1.0;
+						hold_pose_spring.target_state = 1;
 						mag_stage = HandMagStage.HOLD;
 				}
 		}
@@ -502,7 +497,7 @@ private Quaternion flashlight_aim_rot;
 								weapon_slots[target_weapon_slot].type = WeaponSlotType.MAGAZINE;
 								weapon_slots[target_weapon_slot].obj = magazine_instance_in_hand;
 								weapon_slots[target_weapon_slot].spring.state = 0;
-								weapon_slots[target_weapon_slot].spring.target_state = 1.0;
+								weapon_slots[target_weapon_slot].spring.target_state = 1;
 								weapon_slots[target_weapon_slot].start_pos = magazine_instance_in_hand.transform.position - main_camera.transform.position;
 								weapon_slots[target_weapon_slot].start_rot = Quaternion.Inverse(main_camera.transform.rotation) * magazine_instance_in_hand.transform.rotation;
 								magazine_instance_in_hand = null;
@@ -515,11 +510,11 @@ private Quaternion flashlight_aim_rot;
 								// Take mag from inventory
 								magazine_instance_in_hand = weapon_slots[target_weapon_slot].obj;
 								mag_stage = HandMagStage.HOLD;
-								hold_pose_spring.state = 1.0;
-								hold_pose_spring.target_state = 1.0;
+								hold_pose_spring.state = 1;
+								hold_pose_spring.target_state = 1;
 								weapon_slots[target_weapon_slot].type = WeaponSlotType.EMPTYING;
 								weapon_slots[target_weapon_slot].spring.target_state = 0;
-								weapon_slots[target_weapon_slot].spring.state = 1.0;
+								weapon_slots[target_weapon_slot].spring.state = 1;
 								target_weapon_slot = -2;
 						} else if (target_weapon_slot != -1 && mag_stage == HandMagStage.EMPTY && weapon_slots[target_weapon_slot].type == WeaponSlotType.EMPTY && held_flashlight){
 								// Put flashlight away
@@ -527,7 +522,7 @@ private Quaternion flashlight_aim_rot;
 								weapon_slots[target_weapon_slot].type = WeaponSlotType.FLASHLIGHT;
 								weapon_slots[target_weapon_slot].obj = held_flashlight;
 								weapon_slots[target_weapon_slot].spring.state = 0;
-								weapon_slots[target_weapon_slot].spring.target_state = 1.0;
+								weapon_slots[target_weapon_slot].spring.target_state = 1;
 								weapon_slots[target_weapon_slot].start_pos = held_flashlight.transform.position - main_camera.transform.position;
 								weapon_slots[target_weapon_slot].start_rot = Quaternion.Inverse(main_camera.transform.rotation) * held_flashlight.transform.rotation;
 								held_flashlight = null;
@@ -538,7 +533,7 @@ private Quaternion flashlight_aim_rot;
 								held_flashlight.GetComponent(FlashlightScript).TurnOn();
 								weapon_slots[target_weapon_slot].type = WeaponSlotType.EMPTYING;
 								weapon_slots[target_weapon_slot].spring.target_state = 0;
-								weapon_slots[target_weapon_slot].spring.state = 1.0;
+								weapon_slots[target_weapon_slot].spring.state = 1;
 								target_weapon_slot = -2;
 						} else if(gun_instance && target_weapon_slot == -1){
 								// Put gun away
@@ -559,7 +554,7 @@ private Quaternion flashlight_aim_rot;
 										weapon_slots[target_weapon_slot].type = WeaponSlotType.GUN;
 										weapon_slots[target_weapon_slot].obj = gun_instance;
 										weapon_slots[target_weapon_slot].spring.state = 0;
-										weapon_slots[target_weapon_slot].spring.target_state = 1.0;
+										weapon_slots[target_weapon_slot].spring.target_state = 1;
 										weapon_slots[target_weapon_slot].start_pos = gun_instance.transform.position - main_camera.transform.position;
 										weapon_slots[target_weapon_slot].start_rot = Quaternion.Inverse(main_camera.transform.rotation) * gun_instance.transform.rotation;
 										gun_instance = null;
@@ -573,14 +568,14 @@ private Quaternion flashlight_aim_rot;
 												gun_instance = weapon_slots[target_weapon_slot].obj;
 												weapon_slots[target_weapon_slot].type = WeaponSlotType.EMPTYING;
 												weapon_slots[target_weapon_slot].spring.target_state = 0;
-												weapon_slots[target_weapon_slot].spring.state = 1.0;
+												weapon_slots[target_weapon_slot].spring.state = 1;
 												target_weapon_slot = -2;
 										} else if(weapon_slots[target_weapon_slot].type == WeaponSlotType.MAGAZINE && mag_stage == HandMagStage.EMPTY){
 												magazine_instance_in_hand = weapon_slots[target_weapon_slot].obj;
 												mag_stage = HandMagStage.HOLD;
 												weapon_slots[target_weapon_slot].type = WeaponSlotType.EMPTYING;
 												weapon_slots[target_weapon_slot].spring.target_state = 0;
-												weapon_slots[target_weapon_slot].spring.state = 1.0;
+												weapon_slots[target_weapon_slot].spring.state = 1;
 												target_weapon_slot = -2;
 										}
 								}
@@ -670,9 +665,9 @@ private Quaternion flashlight_aim_rot;
 				}
 				if(gun_script.IsSlidePulledBack()){
 						if(gun_tilt != GunTilt.RIGHT){
-								slide_pose_spring.target_state = 1.0;
+								slide_pose_spring.target_state = 1;
 						} else {
-								reload_pose_spring.target_state = 1.0;
+								reload_pose_spring.target_state = 1;
 						}
 				}
 				if(gun_script.IsPressCheck()){
@@ -685,11 +680,11 @@ private Quaternion flashlight_aim_rot;
 				eject_rounds_pose_spring.target_state = 0;
 				inspect_cylinder_pose_spring.target_state = 0;
 				if(gun_script.IsEjectingRounds()){
-						eject_rounds_pose_spring.target_state = 1.0;
+						eject_rounds_pose_spring.target_state = 1;
 						//} else if(gun_script.IsAddingRounds()){
-						//	add_rounds_pose_spring.target_state = 1.0;
+						//	add_rounds_pose_spring.target_state = 1;
 				} else if(gun_script.IsCylinderOpen()){
-						inspect_cylinder_pose_spring.target_state = 1.0;
+						inspect_cylinder_pose_spring.target_state = 1;
 				}
 
 				x_recoil_spring.vel += gun_script.recoil_transfer_x;
@@ -711,7 +706,7 @@ private Quaternion flashlight_aim_rot;
 						mag_stage = HandMagStage.HOLD;
 						hold_pose_spring.state = 0;
 						hold_pose_spring.vel = 0;
-						hold_pose_spring.target_state = 1.0;
+						hold_pose_spring.target_state = 1;
 				}
 				if((Input.GetButtonDown("Insert")/* && aim_spring.state > 0.5*/) || insert_mag_with_number_key){
 						if(mag_stage == HandMagStage.HOLD && !gun_script.IsThereAMagInGun() || insert_mag_with_number_key){
@@ -739,7 +734,7 @@ private Quaternion flashlight_aim_rot;
 								if(head_recoil_delay[i] <= 0.0){
 										head_recoil_spring_x.vel += Random.Range(-30.0,30.0);
 										head_recoil_spring_y.vel += Random.Range(-30.0,30.0);
-										head_recoil_delay[i] = -1.0;
+										head_recoil_delay[i] = -1;
 								}
 						}
 				}
@@ -766,7 +761,7 @@ private Quaternion flashlight_aim_rot;
 								}
 						} else if(mag_stage == HandMagStage.HOLD_TO_INSERT){
 								mag_stage = HandMagStage.HOLD;
-								hold_pose_spring.target_state = 1.0;
+								hold_pose_spring.target_state = 1;
 						}
 				}
 
@@ -796,7 +791,7 @@ private Quaternion flashlight_aim_rot;
 						if(Time.timeScale == 1.0){
 								Time.timeScale = 0.1;
 						} else {
-								Time.timeScale = 1.0;
+								Time.timeScale = 1;
 						}
 				}
 		}
@@ -852,26 +847,26 @@ private Quaternion flashlight_aim_rot;
 
 		function UpdateCheats() {
 				if(iddqd_progress == 0 && Input.GetKeyDown('i')){
-						++iddqd_progress; cheat_delay = 1.0;
+						++iddqd_progress; cheat_delay = 1;
 				} else if(iddqd_progress == 1 && Input.GetKeyDown('d')){
-						++iddqd_progress; cheat_delay = 1.0;
+						++iddqd_progress; cheat_delay = 1;
 				} else if(iddqd_progress == 2 && Input.GetKeyDown('d')){
-						++iddqd_progress; cheat_delay = 1.0;
+						++iddqd_progress; cheat_delay = 1;
 				} else if(iddqd_progress == 3 && Input.GetKeyDown('q')){
-						++iddqd_progress; cheat_delay = 1.0;
+						++iddqd_progress; cheat_delay = 1;
 				} else if(iddqd_progress == 4 && Input.GetKeyDown('d')){
 						iddqd_progress = 0;
 						god_mode = !god_mode; 
 						PlaySoundFromGroup(holder.sound_scream, 1.0);
 				}
 				if(idkfa_progress == 0 && Input.GetKeyDown('i')){
-						++idkfa_progress; cheat_delay = 1.0;
+						++idkfa_progress; cheat_delay = 1;
 				} else if(idkfa_progress == 1 && Input.GetKeyDown('d')){
-						++idkfa_progress; cheat_delay = 1.0;
+						++idkfa_progress; cheat_delay = 1;
 				} else if(idkfa_progress == 2 && Input.GetKeyDown('k')){
-						++idkfa_progress; cheat_delay = 1.0;
+						++idkfa_progress; cheat_delay = 1;
 				} else if(idkfa_progress == 3 && Input.GetKeyDown('f')){
-						++idkfa_progress; cheat_delay = 1.0;
+						++idkfa_progress; cheat_delay = 1;
 				} else if(idkfa_progress == 4 && Input.GetKeyDown('a')){
 						idkfa_progress = 0;
 						if(loose_bullets.length < 30){
@@ -883,20 +878,20 @@ private Quaternion flashlight_aim_rot;
 						PlaySoundFromGroup(holder.sound_scream, 1.0);
 				}
 				if(slomo_progress == 0 && Input.GetKeyDown('s')){
-						++slomo_progress; cheat_delay = 1.0;
+						++slomo_progress; cheat_delay = 1;
 				} else if(slomo_progress == 1 && Input.GetKeyDown('l')){
-						++slomo_progress; cheat_delay = 1.0;
+						++slomo_progress; cheat_delay = 1;
 				} else if(slomo_progress == 2 && Input.GetKeyDown('o')){
-						++slomo_progress; cheat_delay = 1.0;
+						++slomo_progress; cheat_delay = 1;
 				} else if(slomo_progress == 3 && Input.GetKeyDown('m')){
-						++slomo_progress; cheat_delay = 1.0;
+						++slomo_progress; cheat_delay = 1;
 				} else if(slomo_progress == 4 && Input.GetKeyDown('o')){
 						slomo_progress = 0;
 						slomo_mode = true;
 						if(Time.timeScale == 1.0){
 								Time.timeScale = 0.1;
 						} else {
-								Time.timeScale = 1.0;
+								Time.timeScale = 1;
 						}
 						PlaySoundFromGroup(holder.sound_scream, 1.0);
 				}
@@ -1018,7 +1013,7 @@ private Quaternion flashlight_aim_rot;
 						head_tilt += head_tilt_vel * Time.deltaTime;
 						view_rotation_x += head_tilt_x_vel * Time.deltaTime;
 						view_rotation_y += head_tilt_y_vel * Time.deltaTime;
-						var min_fall = character_controller.height * character_controller.transform.localScale.y * -1.0;
+						var min_fall = character_controller.height * character_controller.transform.localScale.y * -1;
 						if(head_fall < min_fall && head_fall_vel < 0.0){			
 								if(Mathf.Abs(head_fall_vel) > 0.5){
 										head_recoil_spring_x.vel += Random.Range(-10,10) * Mathf.Abs(head_fall_vel);
@@ -1058,7 +1053,7 @@ private Quaternion flashlight_aim_rot;
 		function UpdateAimSpring() {
 				var offset_aim_target = false;
 				if((Input.GetButton("Hold To Aim") || aim_toggle) && !dead && gun_instance){
-						aim_spring.target_state = 1.0;
+						aim_spring.target_state = 1;
 						var hit : RaycastHit;
 						if(Physics.Linecast(main_camera.transform.position, AimPos() + AimDir() * 0.2, hit, 1 << 0)){
 								aim_spring.target_state = Mathf.Clamp(
@@ -1072,7 +1067,7 @@ private Quaternion flashlight_aim_rot;
 				}
 				aim_spring.Update();
 				if(offset_aim_target){
-						aim_spring.target_state = 1.0;
+						aim_spring.target_state = 1;
 				}
 		}
 
@@ -1215,7 +1210,7 @@ private Quaternion flashlight_aim_rot;
 
 				flashlight_mouth_spring.target_state = 0;
 				if(magazine_instance_in_hand){
-						flashlight_mouth_spring.target_state = 1.0;
+						flashlight_mouth_spring.target_state = 1;
 				}
 				flashlight_mouth_spring.target_state = Mathf.Max(flashlight_mouth_spring.target_state,
 						(inspect_cylinder_pose_spring.state + eject_rounds_pose_spring.state + (press_check_pose_spring.state/0.6) + (reload_pose_spring.state/0.7) + slide_pose_spring.state) * aim_spring.state);
@@ -1338,7 +1333,7 @@ private Quaternion flashlight_aim_rot;
 		function UpdateLooseBulletDisplay() {
 				var revolver_open = (gun_instance && gun_instance.GetComponent(GunScript).IsCylinderOpen());
 				if((mag_stage == HandMagStage.HOLD && !gun_instance) || picked_up_bullet_delay > 0.0 || revolver_open){
-						show_bullet_spring.target_state = 1.0;
+						show_bullet_spring.target_state = 1;
 						picked_up_bullet_delay = Mathf.Max(0.0, picked_up_bullet_delay - Time.deltaTime);
 				} else {	
 						show_bullet_spring.target_state = 0;

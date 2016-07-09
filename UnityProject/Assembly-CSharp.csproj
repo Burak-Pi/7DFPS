@@ -64,6 +64,13 @@
      <Compile Include="Assets\Game Scripts\Sixense\Dependencies (Needed in the Hierarchy for functionality)\SixenseInitializer.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\AimScript.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\ApplySelectedPrefabs.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\BulletPileScript.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\BulletScript.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\ElectricSparkScript.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\FPSInputController.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\FlashlightScript.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\GUISkinHolder.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\LevelCreatorScript.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\References.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\ShootableLight.cs" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlendOneOne.shader" />
