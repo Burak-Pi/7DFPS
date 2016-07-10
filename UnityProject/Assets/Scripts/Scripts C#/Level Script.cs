@@ -4,7 +4,7 @@ using System.Collections;
 public class LevelScript : MonoBehaviour {
 
 		void Start () {
-				GameObject enemies = transform.FindChild("enemies");
+				Transform enemies = transform.FindChild("enemies");
 
 				if(enemies!=null){
 						foreach(Transform child in enemies){
@@ -13,7 +13,7 @@ public class LevelScript : MonoBehaviour {
 								}
 						}
 				}
-				GameObject players = transform.FindChild("player_spawn");
+				Transform players = transform.FindChild("player_spawn");
 				if(players){
 						int num = 0;
 						foreach(Transform child in players){
@@ -28,7 +28,7 @@ public class LevelScript : MonoBehaviour {
 								++j;
 						}
 				}
-				GameObject items = transform.FindChild("items");
+				Transform items = transform.FindChild("items");
 				if(items!=null){
 						foreach(Transform child in items){
 								if(Random.Range(0.0f,1.0f) < 0.9f){

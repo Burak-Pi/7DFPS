@@ -18,7 +18,7 @@ public class MagScript : MonoBehaviour {
 				if(num_rounds == 0){
 						return false;
 				}
-				GameObject round_obj = transform.FindChild("round_"+num_rounds);
+				GameObject round_obj = transform.FindChild("round_"+num_rounds).gameObject;
 				round_obj.GetComponent<Renderer>().enabled = false;
 				--num_rounds;
 				return true;
@@ -45,7 +45,7 @@ public class MagScript : MonoBehaviour {
 				mag_load_progress = 0;
 				PlaySoundFromGroup(sound_add_round, 0.3f);
 				++num_rounds;
-				GameObject round_obj = transform.FindChild("round_"+num_rounds);
+				GameObject round_obj = transform.FindChild("round_"+num_rounds).gameObject;
 				round_obj.GetComponent<Renderer>().enabled = true;
 				return true;
 		}
@@ -60,9 +60,9 @@ public class MagScript : MonoBehaviour {
 				round_pos = new Vector3[kMaxRounds];
 				round_rot = new Quaternion[kMaxRounds];
 				for(int i=0; i<kMaxRounds; ++i){
-						GameObject round = transform.FindChild("round_"+(i+1));
-						round_pos[i] = round.localPosition;
-						round_rot[i] = round.localRotation;
+						GameObject round = transform.FindChild("round_"+(i+1)).gameObject;
+						round_pos[i] = round.transform.localPosition;
+						round_rot[i] = round.transform.localRotation;
 						if(i < num_rounds){
 								round.GetComponent<Renderer>().enabled = true;
 						} else {
@@ -73,7 +73,7 @@ public class MagScript : MonoBehaviour {
 
 		void PlaySoundFromGroup(AudioClip[] group, float volume){
 				if(group.Length == 0)return;
-				AudioClip which_shot = Random.Range(0,group.Length);
+				int which_shot = Random.Range(0,group.Length);
 				GetComponent<AudioSource>().PlayOneShot(group[which_shot], volume * PlayerPrefs.GetFloat("sound_volume", 1));
 		}
 
@@ -87,7 +87,7 @@ public class MagScript : MonoBehaviour {
 		void FixedUpdate () {
 				if(GetComponent<Rigidbody>() && !GetComponent<Rigidbody>().IsSleeping() && GetComponent<Collider>() && GetComponent<Collider>().enabled){
 						life_time += Time.deltaTime;
-						if(Physics.Linecast(old_pos, transform.position, hit, 1)){
+						if(Physics.Linecast(old_pos, transform.position, out hit, 1)){
 								transform.position = hit.point;
 								transform.GetComponent<Rigidbody>().velocity *= -0.3f;
 						}

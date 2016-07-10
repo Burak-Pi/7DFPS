@@ -51,7 +51,7 @@ public class CharacterMotor : MonoBehaviour {
 						public float maxForwardSpeed = 10, maxSidewaysSpeed = 10, maxBackwardsSpeed = 10;
 
 						// Curve for multiplying speed based on slope (negative = downwards)
-						public AnimationCurve slopeSpeedMultiplier = AnimationCurve(Keyframe(-90, 1), Keyframe(0, 1), Keyframe(90, 0));
+						public AnimationCurve slopeSpeedMultiplier = new AnimationCurve(new Keyframe(-90, 1), new Keyframe(0, 1), new Keyframe(90, 0));
 
 						// How fast does the character change speeds?  Higher is faster.
 						public float maxGroundAcceleration = 30, maxAirAcceleration = 20;
@@ -78,7 +78,7 @@ public class CharacterMotor : MonoBehaviour {
 				public Vector3 hitPoint = Vector3.zero;
 
 						[System.NonSerialized]
-				public Vector3 lastHitPoint = Vector3(Mathf.Infinity, 0, 0);
+				public Vector3 lastHitPoint = new Vector3(Mathf.Infinity, 0, 0);
 				}
 
 		CharacterMotorMovement movement = new CharacterMotorMovement();
@@ -199,13 +199,13 @@ public class CharacterMotor : MonoBehaviour {
 				private CharacterController controller;
 
 				void  Awake (){
-						controller = GetComponent (CharacterController);
+				controller = GetComponent<CharacterController>();
 						tr = transform;
 				}
 
-		public void  GetVelocity (){
-						return movement.velocity;
-				}
+		public Vector3  GetVelocity (){
+			return movement.velocity;
+		}
 
 				private void  UpdateFunction (){
 						// We copy the actual velocity into a temporary variable that we can manipulate.
@@ -244,7 +244,7 @@ public class CharacterMotor : MonoBehaviour {
 
 						// Find out how much we need to push towards the ground to avoid loosing grouning
 						// when walking down a step or over a sharp change in slope.
-						float pushDownOffset = Mathf.Max(controller.stepOffset, Vector3(currentMovementOffset.x, 0, currentMovementOffset.z).magnitude);
+						float pushDownOffset = Mathf.Max(controller.stepOffset, new Vector3(currentMovementOffset.x, 0, currentMovementOffset.z).magnitude);
 						if (grounded)
 								currentMovementOffset -= pushDownOffset * Vector3.up;
 
@@ -363,7 +363,7 @@ public class CharacterMotor : MonoBehaviour {
 								}
 						}
 
-				CharacterController controller= GetComponent (CharacterController);
+				CharacterController controller= GetComponent <CharacterController>();
 						if(crouching && running == 0.0f){
 								height_spring.target_state = 0.5f + head_bob;
 						} else {
@@ -371,10 +371,10 @@ public class CharacterMotor : MonoBehaviour {
 						}
 						height_spring.Update();
 				float old_height = controller.transform.localScale.y * controller.height;
-						controller.transform.localScale.y = height_spring.state;
+				controller.transform.localScale = new Vector3(controller.transform.localScale.x,height_spring.state,controller.transform.localScale.z);
 				float height= controller.transform.localScale.y * controller.height;
 						if(height > old_height){
-								controller.transform.position.y += height - old_height;
+						controller.transform.position += new Vector3(0, height - old_height, 0);
 						}
 						die_dir *= 0.93f;
 
@@ -399,7 +399,7 @@ public class CharacterMotor : MonoBehaviour {
 								UpdateFunction();
 				}
 
-				private void  ApplyInputVelocityChange ( Vector3 velocity  ){	
+		private Vector3  ApplyInputVelocityChange ( Vector3 velocity  ){	
 						if (!canControl)
 								inputMoveDirection = Vector3.zero;
 
@@ -407,7 +407,7 @@ public class CharacterMotor : MonoBehaviour {
 						Vector3 desiredVelocity;
 						if (grounded && TooSteep()) {
 								// The direction we're sliding in
-								desiredVelocity = Vector3(groundNormal.x, 0, groundNormal.z).normalized;
+								desiredVelocity = new Vector3(groundNormal.x, 0, groundNormal.z).normalized;
 								// Find the input movement direction projected onto the sliding direction
 						Vector3 projectedMoveDir= Vector3.Project(inputMoveDirection, desiredVelocity);
 								// Add the sliding direction, the spped control, and the sideways control vectors
@@ -437,7 +437,7 @@ public class CharacterMotor : MonoBehaviour {
 										if(crouching){
 												step_speed *= 1.5f;
 										}
-										if(!running){
+								if(running == 0){
 												step_speed = Mathf.Clamp(step_speed,1.0f,4.0f);
 										} else {
 												step_speed = running * 2.5f + 2.5f;
@@ -498,7 +498,7 @@ public class CharacterMotor : MonoBehaviour {
 						return velocity;
 				}
 
-				private void  ApplyGravityAndJumping ( Vector3 velocity  ){
+		private Vector3  ApplyGravityAndJumping ( Vector3 velocity  ){
 
 						if (!inputJump || !canControl) {
 								jumping.holdingJumpButton = false;
@@ -614,7 +614,7 @@ public class CharacterMotor : MonoBehaviour {
 						);
 				}
 
-				private void  GetDesiredHorizontalVelocity (){
+		private Vector3  GetDesiredHorizontalVelocity (){
 						if(GetComponent<AimScript>().IsDead()){
 								return die_dir;
 						}
@@ -636,7 +636,7 @@ public class CharacterMotor : MonoBehaviour {
 						return Vector3.Cross(sideways, groundNormal).normalized * hVelocity.magnitude;
 				}
 
-				private void  IsGroundedTest (){
+		private bool  IsGroundedTest (){
 						return (groundNormal.y > 0.01f);
 				}
 
@@ -648,33 +648,33 @@ public class CharacterMotor : MonoBehaviour {
 								return movement.maxAirAcceleration;
 				}
 
-				void  CalculateJumpVerticalSpeed ( float targetJumpHeight  ){
+		float  CalculateJumpVerticalSpeed ( float targetJumpHeight  ){
 						// From the jump height and gravity we deduce the upwards speed 
 						// for the character to reach at the apex.
 						return Mathf.Sqrt (2 * targetJumpHeight * movement.gravity);
 				}
 
-				void  IsJumping (){
+		bool  IsJumping (){
 						return jumping.jumping;
 				}
 
-				void  IsSliding (){
+		bool  IsSliding (){
 						return (grounded && sliding.enabled && TooSteep());
 				}
 
-				void  IsTouchingCeiling (){
+		bool  IsTouchingCeiling (){
 						return (movement.collisionFlags & CollisionFlags.CollidedAbove) != 0;
 				}
 
-				void  IsGrounded (){
+		bool  IsGrounded (){
 						return grounded;
 				}
 
-				void  TooSteep (){
+		bool  TooSteep (){
 						return (groundNormal.y <= Mathf.Cos(controller.slopeLimit * Mathf.Deg2Rad));
 				}
 
-				void  GetDirection (){
+		Vector3  GetDirection (){
 						return inputMoveDirection;
 				}
 

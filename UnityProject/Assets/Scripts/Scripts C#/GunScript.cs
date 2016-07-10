@@ -134,6 +134,7 @@ public class GunScript : MonoBehaviour {
 						return hammer;
 				}
 
+		public Transform extractor_rod;
 				public void Start (){
 						disable_springs = false;
 						if(transform.FindChild("slide")){
@@ -162,7 +163,7 @@ public class GunScript : MonoBehaviour {
 								if(yolk){
 								Transform cylinder_assembly= yolk.FindChild("cylinder_assembly");
 										if(cylinder_assembly){
-										Transform extractor_rod= cylinder_assembly.FindChild("extractor_rod");
+										 extractor_rod= cylinder_assembly.FindChild("extractor_rod");
 												if(extractor_rod){
 														extractor_rod_rel_pos = extractor_rod.localPosition;
 												}
@@ -176,16 +177,16 @@ public class GunScript : MonoBehaviour {
 
 								renderers = magazine_instance_in_gun.GetComponentsInChildren<Renderer>();
 								foreach(Renderer renderer in renderers){
-										renderer.castShadows = false; 
+								renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 								}
 
 								if(Random.Range(0,2) == 0){
-										round_in_chamber = Instantiate(casing_with_bullet, transform.FindChild("point_chambered_round").position, transform.FindChild("point_chambered_round").rotation);
+								round_in_chamber = Instantiate(casing_with_bullet, transform.FindChild("point_chambered_round").position, transform.FindChild("point_chambered_round").rotation) as GameObject;
 										round_in_chamber.transform.parent = transform;
-										round_in_chamber.transform.localScale = Vector3(1.0f,1.0f,1.0f);
+								round_in_chamber.transform.localScale =Vector3.one;
 										renderers = round_in_chamber.GetComponentsInChildren<Renderer>();
 										foreach(Renderer renderer in renderers){
-												renderer.castShadows = false; 
+										renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 										}
 								}
 
@@ -203,13 +204,13 @@ public class GunScript : MonoBehaviour {
 												continue;
 										}
 								string name= "point_chamber_"+(i+1);
-								cylinders[i].obj = Instantiate(casing_with_bullet, extractor_rod.FindChild(name).position, extractor_rod.FindChild(name).rotation);
-								cylinders[i].obj.transform.localScale = Vector3(1.0f,1.0f,1.0f);
+								cylinders[i].obj = Instantiate(casing_with_bullet, extractor_rod.FindChild(name).position, extractor_rod.FindChild(name).rotation) as GameObject;
+								cylinders[i].obj.transform.localScale = Vector3.one;
 										cylinders[i].can_fire = true;
 										cylinders[i].seated = Random.Range(0.0f,0.5f);
 								renderers = cylinders[i].obj.GetComponentsInChildren<Renderer>();
 										foreach(Renderer renderer in renderers){
-												renderer.castShadows = false; 
+										renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 										}
 								}
 						}
@@ -261,13 +262,13 @@ public class GunScript : MonoBehaviour {
 						if(magazine_instance_in_gun && MagScriptGet().NumRounds() > 0 && mag_stage == MagStage.IN){
 								if(!round_in_chamber){
 										MagScriptGet().RemoveRound();
-										round_in_chamber = Instantiate(casing_with_bullet, transform.FindChild("point_load_round").position, transform.FindChild("point_load_round").rotation);
+								round_in_chamber = Instantiate(casing_with_bullet, transform.FindChild("point_load_round").position, transform.FindChild("point_load_round").rotation) as GameObject;
 								renderers= round_in_chamber.GetComponentsInChildren<Renderer>();
 										foreach(Renderer renderer in renderers){
-												renderer.castShadows = false; 
+										renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 										}
 										round_in_chamber.transform.parent = transform;
-										round_in_chamber.transform.localScale = Vector3(1.0f,1.0f,1.0f);
+								round_in_chamber.transform.localScale = Vector3.one;
 										round_in_chamber_state = RoundState.LOADING;
 								}
 								return true;
@@ -278,7 +279,7 @@ public class GunScript : MonoBehaviour {
 
 				public void PullSlideBack (){
 						if(gun_type != GunType.AUTOMATIC){
-								return false;
+								return;
 						}
 						slide_amount = 1.0f;
 						if(slide_lock && mag_stage == MagStage.IN && (!magazine_instance_in_gun || MagScriptGet().NumRounds() == 0)){
@@ -291,8 +292,8 @@ public class GunScript : MonoBehaviour {
 								round_in_chamber.transform.parent = null;
 								round_in_chamber.GetComponent<Rigidbody>().interpolation = RigidbodyInterpolation.Interpolate;
 								round_in_chamber.GetComponent<Rigidbody>().velocity = velocity;
-								round_in_chamber.GetComponent<Rigidbody>().velocity += transform.rotation * Vector3(Random.Range(2.0f,4.0f),Random.Range(1.0f,2.0f),Random.Range(-1.0f,-3.0f));
-								round_in_chamber.GetComponent<Rigidbody>().angularVelocity = Vector3(Random.Range(-40.0f,40.0f),Random.Range(-40.0f,40.0f),Random.Range(-40.0f,40.0f));
+								round_in_chamber.GetComponent<Rigidbody>().velocity += transform.rotation * new Vector3(Random.Range(2.0f,4.0f),Random.Range(1.0f,2.0f),Random.Range(-1.0f,-3.0f));
+								round_in_chamber.GetComponent<Rigidbody>().angularVelocity = new Vector3(Random.Range(-40.0f,40.0f),Random.Range(-40.0f,40.0f),Random.Range(-40.0f,40.0f));
 								round_in_chamber = null;
 						}
 						if(!ChamberRoundFromMag() && mag_stage == MagStage.IN){
@@ -302,7 +303,7 @@ public class GunScript : MonoBehaviour {
 
 				public void ReleaseSlideLock (){
 						if(gun_type != GunType.AUTOMATIC){
-								return false;
+								return;
 						}
 						slide_lock = false;
 				}
@@ -311,10 +312,10 @@ public class GunScript : MonoBehaviour {
 						return a + (b-a) * val;
 				}
 
-				Quaternion mix (  Quaternion a ,   Quaternion b ,   float val   ){
+				Quaternion mix (Quaternion a, Quaternion b, float val){
 				float angle= 0.0f;
-				Vector3 axis= Vector3();
-						(Quaternion.Inverse(b)*a).ToAngleAxis(angle, axis);
+				Vector3 axis= Vector3.zero;
+						(Quaternion.Inverse(b)*a).ToAngleAxis(out angle, out axis);
 						if(angle > 180){
 								angle -= 360;
 						}
@@ -324,11 +325,11 @@ public class GunScript : MonoBehaviour {
 						return a * Quaternion.AngleAxis(angle * -val, axis);
 				}
 
-		public void PlaySoundFromGroup ( List<AudioClip> group, float volume){
-				if(group.Count == 0){
+		public void PlaySoundFromGroup (AudioClip[] group, float volume){
+				if(group.Length == 0){
 								return;
 						}
-				int which_shot= Random.Range(0,group.Count-1);
+				int which_shot= Random.Range(0,group.Length);
 						GetComponent<AudioSource>().PlayOneShot(group[which_shot], volume * PlayerPrefs.GetFloat("sound_volume", 1.0f));
 				}
 
@@ -341,7 +342,7 @@ public class GunScript : MonoBehaviour {
 								pressure_on_trigger = PressureState.CONTINUING;
 						}
 						if(yolk_stage != YolkStage.CLOSED){
-								return;
+						return false;
 						}
 						if((pressure_on_trigger == PressureState.INITIAL || action_type == ActionType.DOUBLE) && !slide_lock && thumb_on_hammer == Thumb.OFF_HAMMER && hammer_cocked == 1.0f && safety_off == 1.0f && (auto_mod_stage == AutoModStage.ENABLED || !fired_once_this_pull)){
 								trigger_pressed = 1.0f;
@@ -352,11 +353,11 @@ public class GunScript : MonoBehaviour {
 												PlaySoundFromGroup(sound_gunshot_smallroom, 1.0f);
 												round_in_chamber_state = RoundState.FIRED;
 												GameObject.Destroy(round_in_chamber);
-												round_in_chamber = Instantiate(shell_casing, transform.FindChild("point_chambered_round").position, transform.rotation);
+										round_in_chamber = Instantiate(shell_casing, transform.FindChild("point_chambered_round").position, transform.rotation) as GameObject;
 												round_in_chamber.transform.parent = transform;
 												renderers= round_in_chamber.GetComponentsInChildren<Renderer>();
 												foreach(Renderer renderer in renderers){
-														renderer.castShadows = false; 
+												renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 												}
 
 												Instantiate(muzzle_flash, transform.FindChild("point_muzzleflash").position, transform.FindChild("point_muzzleflash").rotation);
@@ -384,11 +385,11 @@ public class GunScript : MonoBehaviour {
 												round_in_chamber_state = RoundState.FIRED;
 												cylinders[which_chamber].can_fire = false;
 												cylinders[which_chamber].seated += Random.Range(0.0f,0.5f);
-												cylinders[which_chamber].obj= Instantiate(shell_casing, round.transform.position, round.transform.rotation);
+										cylinders[which_chamber].obj= Instantiate(shell_casing, round.transform.position, round.transform.rotation) as GameObject;
 												GameObject.Destroy(round);
 												renderers = cylinders[which_chamber].obj.GetComponentsInChildren<Renderer>();
 												foreach(Renderer renderer in renderers){
-														renderer.castShadows = false; 
+												renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 												}				
 												Instantiate(muzzle_flash, transform.FindChild("point_muzzleflash").position, transform.FindChild("point_muzzleflash").rotation);
 										GameObject	bullet = Instantiate(bullet_obj, transform.FindChild("point_muzzle").position, transform.FindChild("point_muzzle").rotation) as GameObject;
@@ -433,7 +434,7 @@ public class GunScript : MonoBehaviour {
 
 				public void TryToReleaseSlideLock (){
 						if(gun_type != GunType.AUTOMATIC){
-								return false;
+								return;
 						}
 						if(slide_amount == kSlideLockPosition){
 								ReleaseSlideLock();
@@ -442,7 +443,7 @@ public class GunScript : MonoBehaviour {
 
 				public void PressureOnSlideLock (){
 						if(gun_type != GunType.AUTOMATIC){
-								return false;
+								return;
 						}
 						if(slide_amount > kPressCheckPosition && slide_stage == SlideStage.PULLBACK){
 								slide_lock = true;
@@ -464,7 +465,7 @@ public class GunScript : MonoBehaviour {
 
 				public void ToggleSafety (){
 						if(!has_safety){
-								return false;
+								return;
 						}
 						if(safety == Safety.OFF){
 								if(slide_amount == 0.0f && hammer_cocked == 1.0f){
@@ -479,7 +480,7 @@ public class GunScript : MonoBehaviour {
 
 				public void ToggleAutoMod (){
 						if(!has_auto_mod){
-								return false;
+								return;
 						}
 						PlaySoundFromGroup(sound_safety, kGunMechanicVolume);
 						if(auto_mod_stage == AutoModStage.DISABLED){
@@ -491,7 +492,7 @@ public class GunScript : MonoBehaviour {
 
 				public void PullBackSlide (){
 						if(gun_type != GunType.AUTOMATIC){
-								return false;
+								return;
 						}
 						if(slide_stage != SlideStage.PULLBACK && safety == Safety.OFF){
 								slide_stage = SlideStage.PULLBACK;
@@ -502,7 +503,7 @@ public class GunScript : MonoBehaviour {
 
 				public void ReleaseSlide (){
 						if(gun_type != GunType.AUTOMATIC){
-								return false;
+								return;
 						}
 						slide_stage = SlideStage.NOTHING;
 						slide_pressure = false;
@@ -520,7 +521,7 @@ public class GunScript : MonoBehaviour {
 						}
 						if(hammer_cocked < 1.0f){
 								cylinder_rotation = (active_cylinder + hammer_cocked) * 360.0f / cylinder_capacity;
-								target_cylinder_offset = 0.0f;
+								target_cylinder_offset = 0;
 						}
 				}
 
@@ -639,13 +640,13 @@ public class GunScript : MonoBehaviour {
 										Transform extractor_rod= cylinder_assembly.FindChild("extractor_rod");
 												if(extractor_rod){
 												string name= "point_chamber_"+(best_chamber+1);
-												cylinders[best_chamber].obj = Instantiate(casing_with_bullet, extractor_rod.FindChild(name).position, extractor_rod.FindChild(name).rotation);
-												cylinders[best_chamber].obj.transform.localScale = Vector3(1.0f,1.0f,1.0f);
+												cylinders[best_chamber].obj = Instantiate(casing_with_bullet, extractor_rod.FindChild(name).position, extractor_rod.FindChild(name).rotation) as GameObject;
+												cylinders[best_chamber].obj.transform.localScale = Vector3.one;
 														cylinders[best_chamber].can_fire = true;
 														cylinders[best_chamber].seated = Random.Range(0.0f,1.0f);
 												renderers= cylinders[best_chamber].obj.GetComponentsInChildren<Renderer>();
 														foreach(Renderer renderer in renderers){
-																renderer.castShadows = false; 
+														renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 														}
 														PlaySoundFromGroup(sound_bullet_eject, kGunMechanicVolume);
 														return true;
@@ -905,7 +906,7 @@ public class GunScript : MonoBehaviour {
 						}
 
 						if(has_auto_mod){
-						Transform auto_mod_amount_display= auto_mod_amount;
+						float auto_mod_amount_display= auto_mod_amount;
 								if(disable_springs){
 										auto_mod_amount_display = Mathf.Floor(auto_mod_amount_display + 0.5f);
 								}
@@ -994,7 +995,7 @@ public class GunScript : MonoBehaviour {
 												extractor_rod_stage = ExtractorRodStage.CLOSED;
 												PlaySoundFromGroup(sound_extractor_rod_close, kGunMechanicVolume);
 										}
-										for(FIXME_VAR_TYPE i=0; i<cylinder_capacity; ++i){
+										for(int i=0; i<cylinder_capacity; ++i){
 												if(cylinders[i].obj){
 														cylinders[i].falling = false;
 												}
@@ -1026,7 +1027,7 @@ public class GunScript : MonoBehaviour {
 																		bullet.transform.parent = null; 
 																		bullet.GetComponent<Rigidbody>().interpolation = RigidbodyInterpolation.Interpolate;
 																		bullet.GetComponent<Rigidbody>().velocity = velocity;
-																		bullet.GetComponent<Rigidbody>().angularVelocity = Vector3(Random.Range(-40.0f,40.0f),Random.Range(-40.0f,40.0f),Random.Range(-40.0f,40.0f));
+																		bullet.GetComponent<Rigidbody>().angularVelocity = new Vector3(Random.Range(-40.0f,40.0f),Random.Range(-40.0f,40.0f),Random.Range(-40.0f,40.0f));
 																		cylinders[i].obj= null;
 																		cylinders[i].can_fire = false;
 																}
@@ -1054,7 +1055,7 @@ public class GunScript : MonoBehaviour {
 										transform.FindChild("point_yolk_pivot_open").localRotation,
 										yolk_open_display);
 						Transform cylinder_assembly= yolk_pivot.FindChild("yolk").FindChild("cylinder_assembly");
-								cylinder_assembly.localRotation.eulerAngles.z = cylinder_rotation;	
+						cylinder_assembly.eulerAngles = new Vector3(cylinder_assembly.eulerAngles.x, cylinder_assembly.eulerAngles.y, cylinder_rotation);
 						Transform extractor_rod= cylinder_assembly.FindChild("extractor_rod");
 								extractor_rod.localPosition = Vector3.Lerp(
 										extractor_rod_rel_pos, 

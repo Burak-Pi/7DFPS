@@ -60,7 +60,7 @@ public class PlatformInputController : MonoBehaviour {
 				}
 		}
 
-		void ProjectOntoPlane (Vector3 v, Vector3 normal) {
+		Vector3 ProjectOntoPlane (Vector3 v, Vector3 normal) {
 				return (v - Vector3.Project(v, normal));
 		}
 

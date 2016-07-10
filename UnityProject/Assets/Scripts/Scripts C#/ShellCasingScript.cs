@@ -10,8 +10,8 @@ public class ShellCasingScript : MonoBehaviour {
 		float life_time= 0.0f, glint_delay= 0, glint_progress= 0;
 				private Light glint_light;
 
-		void  PlaySoundFromGroup ( List<AudioClip> group, float volume){
-				AudioClip which_shot = Random.Range(0,group.Count-1);
+		void  PlaySoundFromGroup (AudioClip[] group, float volume){
+				int which_shot = Random.Range(0,group.Length-1);
 						GetComponent<AudioSource>().PlayOneShot(group[which_shot], volume * PlayerPrefs.GetFloat("sound_volume", 1.0f));
 				}
 
@@ -34,7 +34,7 @@ public class ShellCasingScript : MonoBehaviour {
 						if(GetComponent<Rigidbody>() && !GetComponent<Rigidbody>().IsSleeping() && GetComponent<Collider>() && GetComponent<Collider>().enabled){
 								life_time += Time.deltaTime;
 								RaycastHit hit;
-								if(Physics.Linecast(old_pos, transform.position, hit, 1)){
+								if(Physics.Linecast(old_pos, transform.position, out hit, 1)){
 										transform.position = hit.point;
 										transform.GetComponent<Rigidbody>().velocity *= -0.3f;
 								}

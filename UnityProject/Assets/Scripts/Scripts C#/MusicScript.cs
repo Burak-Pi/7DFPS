@@ -41,7 +41,7 @@ public class MusicScript : MonoBehaviour {
 				music_volume = new float[music_layers.Length];
 				target_gain = new float[music_layers.Length];
 				for(int i=0; i<music_layers.Length; ++i){
-						AudioSource source = gameObject.AddComponent(AudioSource);
+						AudioSource source = gameObject.AddComponent<AudioSource>();
 						source.clip = music_layers[i];
 						music_sources[i] = source;
 						music_sources[i].loop = true;
@@ -49,7 +49,7 @@ public class MusicScript : MonoBehaviour {
 						music_volume[i] = 0;
 						target_gain[i] = 0;
 				}
-				sting_source = gameObject.AddComponent(AudioSource);
+				sting_source = gameObject.AddComponent<AudioSource>();
 				music_sources[0].Play();
 				music_sources[1].Play();
 				music_sources[2].Play();

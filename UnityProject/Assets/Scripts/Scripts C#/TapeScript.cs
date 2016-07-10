@@ -18,7 +18,7 @@ public class TapeScript : MonoBehaviour {
 				if(GetComponent<Rigidbody>() && !GetComponent<Rigidbody>().IsSleeping() && GetComponent<Collider>() && GetComponent<Collider>().enabled){
 						life_time += Time.deltaTime;
 						RaycastHit hit;
-						if(Physics.Linecast(old_pos, transform.position, hit, 1)){
+						if(Physics.Linecast(old_pos, transform.position, out hit, 1)){
 								transform.position = hit.point;
 								transform.GetComponent<Rigidbody>().velocity *= -0.3f;
 						}

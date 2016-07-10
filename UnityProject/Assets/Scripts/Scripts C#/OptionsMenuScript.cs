@@ -9,12 +9,12 @@ public class OptionsMenuScript : MonoBehaviour {
 		public bool show_menu;
 
 		public void OnApplicationPause() {  
-			Screen.lockCursor = false;
+				Cursor.lockState = CursorLockMode.None;
 		}
 
 		public void OnApplicationFocus() {
 			if(!show_menu){
-				Screen.lockCursor = true;
+						Cursor.lockState = CursorLockMode.Locked;
 			}
 		}
 
@@ -33,8 +33,8 @@ public class OptionsMenuScript : MonoBehaviour {
 			}
 			windowRect = GUI.Window (
 					0, 
-					Rect(Screen.width*0.5f - menu_width*0.5f, Screen.height*0.5f - menu_height*0.5f, menu_width, menu_height), 
-						WindowVoid(), 
+					new Rect(Screen.width*0.5f - menu_width*0.5f, Screen.height*0.5f - menu_height*0.5f, menu_width, menu_height), 
+						WindowVoid, 
 					"",
 					skin.window);
 		}
@@ -43,12 +43,12 @@ public class OptionsMenuScript : MonoBehaviour {
 		private float line_height = 24, line_offset = 24;
 
 		public void DrawCursor_Init() {
-				draw_cursor = Vector2(25,25);
-				draw_cursor_line = Vector2(0,0);	
+				draw_cursor = new Vector2(25,25);
+				draw_cursor_line = new Vector2(0,0);	
 		}
 
 		public void DrawCursor_NextLine() {
-				draw_cursor_line = Vector2(0,0);	
+				draw_cursor_line = new Vector2(0,0);	
 				draw_cursor.y += line_offset;
 		}
 
@@ -123,7 +123,7 @@ public class OptionsMenuScript : MonoBehaviour {
 		}
 
 		void Start() {
-				Screen.lockCursor = true;
+				Cursor.lockState = CursorLockMode.Locked;
 				RestoreDefaults();
 				master_volume = PlayerPrefs.GetFloat("master_volume", master_volume);
 				sound_volume = PlayerPrefs.GetFloat("sound_volume", sound_volume);
@@ -133,7 +133,7 @@ public class OptionsMenuScript : MonoBehaviour {
 				lock_gun_to_center = PlayerPrefs.GetInt("lock_gun_to_center", lock_gun_to_center?1:0)==1;
 				mouse_invert = PlayerPrefs.GetInt("mouse_invert", mouse_invert?1:0)==1;
 				toggle_crouch = PlayerPrefs.GetInt("toggle_crouch", toggle_crouch?1:0)==1;      
-				gun_distance = PlayerPrefs.GetFloat("gun_distance", 1.0);       
+				gun_distance = PlayerPrefs.GetFloat("gun_distance", 1.0f);       
 		}
 
 
@@ -158,14 +158,14 @@ public class OptionsMenuScript : MonoBehaviour {
 						vert_scroll += Input.GetAxis("Mouse ScrollWheel");
 				}
 				if(Input.GetKeyDown ("escape") && !show_menu){
-						Screen.lockCursor = false;
+						Cursor.lockState = CursorLockMode.None;
 						ShowMenu();
 				} else if(Input.GetKeyDown ("escape") && show_menu){
-						Screen.lockCursor = true;
+						Cursor.lockState = CursorLockMode.Locked;
 						HideMenu();
 				}
 				if(Input.GetMouseButtonDown(0) && !show_menu){
-						Screen.lockCursor = true;
+						Cursor.lockState = CursorLockMode.Locked;
 				}
 				if(show_menu){
 						Time.timeScale = 0;
@@ -179,9 +179,9 @@ public class OptionsMenuScript : MonoBehaviour {
 		void WindowVoid (int windowID) {
 
 				scroll_view_vector = GUI.BeginScrollView (
-						Rect (0, 0, windowRect.width, windowRect.height), 
+						new Rect (0, 0, windowRect.width, windowRect.height), 
 						scroll_view_vector, 
-						Rect (0, vert_scroll_pixels, windowRect.width, windowRect.height));
+						new Rect (0, vert_scroll_pixels, windowRect.width, windowRect.height));
 
 				DrawCursor_Init();
 				mouse_invert = DrawCheckbox(mouse_invert, "Invert mouse");
@@ -227,7 +227,7 @@ public class OptionsMenuScript : MonoBehaviour {
 						DrawCursor_NextLine();
 				}
 				if(DrawButton("Resume")){
-						Screen.lockCursor = true;
+						Cursor.lockState = CursorLockMode.Locked;
 						show_menu = false;
 				}
 				draw_cursor.y += line_offset * 0.3f;
@@ -251,7 +251,7 @@ public class OptionsMenuScript : MonoBehaviour {
 								vert_scroll = leeway;
 						}
 						vert_scroll = GUI.VerticalScrollbar (
-								Rect (menu_width-20, 20, menu_width, menu_height-25), 
+								new Rect (menu_width-20, 20, menu_width, menu_height-25), 
 								vert_scroll, 
 								windowRect.height / content_height,
 								content_height / windowRect.height, 

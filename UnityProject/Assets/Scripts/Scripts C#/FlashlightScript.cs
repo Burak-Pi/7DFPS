@@ -5,7 +5,7 @@ public class FlashlightScript : MonoBehaviour {
 
 		AnimationCurve battery_curve;
 		AudioClip sound_turn_on, sound_turn_off;
-		private float kSoundVolume = 0.3f, max_battery_life = 60*60*5.5f, battery_life_remaining = max_battery_life;
+		private float kSoundVolume = 0.3f, max_battery_life = 60*60*5.5f, battery_life_remaining = 60*60*5.5f;
 		private bool switch_on;
 
 		private float initial_pointlight_intensity, initial_spotlight_intensity;
@@ -36,9 +36,9 @@ public class FlashlightScript : MonoBehaviour {
 						if(battery_life_remaining <= 0){
 								battery_life_remaining = 0;
 						}
-						var battery_curve_eval = battery_curve.Evaluate(1.0-battery_life_remaining/max_battery_life);
-						transform.FindChild("Pointlight").gameObject.GetComponent<Light>().intensity = initial_pointlight_intensity * battery_curve_eval * 8.0;
-						transform.FindChild("Spotlight").gameObject.GetComponent<Light>().intensity = initial_spotlight_intensity * battery_curve_eval * 3.0;
+						var battery_curve_eval = battery_curve.Evaluate(1.0f-battery_life_remaining/max_battery_life);
+						transform.FindChild("Pointlight").gameObject.GetComponent<Light>().intensity = initial_pointlight_intensity * battery_curve_eval * 8.0f;
+						transform.FindChild("Spotlight").gameObject.GetComponent<Light>().intensity = initial_spotlight_intensity * battery_curve_eval * 3.0f;
 						transform.FindChild("Pointlight").gameObject.GetComponent<Light>().enabled = true;
 						transform.FindChild("Spotlight").gameObject.GetComponent<Light>().enabled = true;
 				} else {

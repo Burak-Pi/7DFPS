@@ -7,16 +7,16 @@ public class LevelCreatorScript : MonoBehaviour {
 		GameObject[] level_tiles;
 		List<Light> shadowed_lights = new List<Light>();
 		List<int> tiles = new List<int>();
-
+		GameObject child_obj;
 		float shadowed_amount, shadow_threshold, fade_threshold;
 		Transform main_camera;
-
+		Component[] lights;
 		void SpawnTile(int where,float challenge , bool player){
 				GameObject level_obj = level_tiles[Random.Range(0,level_tiles.Length)];
 				GameObject level = new GameObject(level_obj.name + " (Clone)");
 				foreach (Transform child in level_obj.transform){
 						if(child.gameObject.name != "enemies" && child.gameObject.name != "player_spawn" && child.gameObject.name != "items"){
-								GameObject child_obj = Instantiate(child.gameObject, new Vector3(0,0,where*20) + child.localPosition, child.localRotation) as GameObject;
+								child_obj = Instantiate(child.gameObject, new Vector3(0,0,where*20) + child.localPosition, child.localRotation) as GameObject;
 								child_obj.transform.parent = level.transform;
 						}
 				}
@@ -24,7 +24,7 @@ public class LevelCreatorScript : MonoBehaviour {
 				if(enemies){
 						foreach(Transform child in enemies){
 								if(Random.Range(0.0f,1.0f) <= challenge){
-										child_obj = Instantiate(child.gameObject, Vector3(0,0,where*20) + child.localPosition + enemies.localPosition, child.localRotation);
+										child_obj = Instantiate(child.gameObject, new Vector3(0,0,where*20) + child.localPosition + enemies.localPosition, child.localRotation) as GameObject;
 										child_obj.transform.parent = level.transform;
 								}
 						}
@@ -33,7 +33,7 @@ public class LevelCreatorScript : MonoBehaviour {
 				if(items){
 						foreach(Transform child in items){
 								if(Random.Range(0.0f,1.0f) <= (player?challenge+0.3f:challenge)){
-										child_obj = Instantiate(child.gameObject, Vector3(0,0,where*20) + child.localPosition + items.localPosition, items.localRotation);
+										child_obj = Instantiate(child.gameObject, new Vector3(0,0,where*20) + child.localPosition + items.localPosition, items.localRotation) as GameObject;
 										child_obj.transform.parent = level.transform;
 								}
 						}
@@ -49,7 +49,7 @@ public class LevelCreatorScript : MonoBehaviour {
 								var j=0;
 								foreach(Transform child in players){
 										if(j == save){
-												child_obj = Instantiate(child.gameObject, Vector3(0,0,where*20) + child.localPosition + players.localPosition, child.localRotation);
+												child_obj = Instantiate(child.gameObject, new Vector3(0,0,where*20) + child.localPosition + players.localPosition, child.localRotation) as GameObject;
 												child_obj.transform.parent = level.transform;
 												child_obj.name = "Player";
 										}
@@ -59,10 +59,10 @@ public class LevelCreatorScript : MonoBehaviour {
 				}
 				level.transform.parent = this.gameObject.transform;
 
-				lights = GetComponentsInChildren(Light);
+				lights = GetComponentsInChildren<Light>();
 				foreach(Light light in lights){
 						if(light.enabled && light.shadows == LightShadows.Hard){
-								shadowed_lights.push(light);
+								shadowed_lights.Add(light);
 						}
 				}
 				tiles.Add(where);
@@ -73,7 +73,6 @@ public class LevelCreatorScript : MonoBehaviour {
 		}
 
 		void Start () {
-				shadowed_lights = new Array();
 				tiles.Clear();
 				SpawnTile(0,0.0f,true);
 				for(int i=-3; i <= 3; ++i){
@@ -96,9 +95,9 @@ public class LevelCreatorScript : MonoBehaviour {
 
 
 		void Update () {
-				int tile_x = main_camera.position.z / 20 + 0.5f;
+				float tile_x = main_camera.position.z / 20 + 0.5f;
 				for(int i=-2; i <= 2; ++i){
-						CreateTileIfNeeded(tile_x+i);
+						CreateTileIfNeeded((int)(tile_x+i));
 				}
 				foreach(Light light in shadowed_lights){
 						if(!light){
