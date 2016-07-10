@@ -3,13 +3,12 @@ using System.Collections;
 
 public class GUISkinHolder : MonoBehaviour {
 
-		GUISkin gui_skin;
-		AudioClip[] sound_scream, sound_tape_content, sound_tape_start;
-		AudioClip sound_tape_end, sound_tape_background;
-		public AudioClip win_sting;
-		GameObject tape_object, weapon, flashlight_object;
-		GameObject[] weapons;
-		bool has_flashlight;
+		public GUISkin gui_skin;
+		public 	AudioClip[] sound_scream, sound_tape_content;
+		public AudioClip sound_tape_end, sound_tape_background, sound_tape_start, win_sting;
+		public GameObject tape_object, weapon, flashlight_object;
+		public GameObject[] weapons;
+		public bool has_flashlight;
 
 		void Awake () {
 			weapon = weapons[Random.Range(0,weapons.Length)];

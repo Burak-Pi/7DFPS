@@ -14,26 +14,26 @@ public class BulletScript : MonoBehaviour {
 		private float death_time = 0;
 		private int segment = 1;
 
-		void SetVelocity(Vector3 vel){
+		public 	void SetVelocity(Vector3 vel){
 				this.velocity = vel;
 		}
 
-		void SetHostile(){
+		public void SetHostile(){
 				GetComponent<AudioSource>().rolloffMode = AudioRolloffMode.Logarithmic;
-				PlaySoundFromGroup(sound_flyby, 0.4);
+				PlaySoundFromGroup(sound_flyby, 0.4f);
 				hostile = true;
 		}
 
 		void Start () {
-				line_renderer = GetComponent(LineRenderer);
+				line_renderer = GetComponent<LineRenderer>();
 				line_renderer.SetPosition(0, transform.position);
 				line_renderer.SetPosition(1, transform.position);
 				old_pos = transform.position;
 		}
 
-		MonoBehaviour RecursiveHasScript(GameObject obj,string script, int depth) {
+		public 	MonoBehaviour RecursiveHasScript(GameObject obj,string script, int depth) {
 				if(obj.GetComponent(script)){
-						return obj.GetComponent(script);
+						return (MonoBehaviour)obj.GetComponent(script);
 				} else if(depth > 0 && obj.transform.parent){
 						return RecursiveHasScript(obj.transform.parent.gameObject, script, depth-1);
 				} else {
@@ -41,12 +41,12 @@ public class BulletScript : MonoBehaviour {
 				}
 		}
 
-		Quaternion RandomOrientation() {
-				return Quaternion.EulerAngles(Random.Range(0,360),Random.Range(0,360),Random.Range(0,360));
+		public static Quaternion RandomOrientation() {
+				return Quaternion.Euler(Random.Range(0,360),Random.Range(0,360),Random.Range(0,360));
 		}
 
-		void PlaySoundFromGroup(List<AudioClip> group,float volume){
-				var which_shot = Random.Range(0,(group.Count-1));
+		public void PlaySoundFromGroup(AudioClip[] group,float volume){
+				var which_shot = Random.Range(0,(group.Length-1));
 				GetComponent<AudioSource>().PlayOneShot(group[which_shot], volume * PlayerPrefs.GetFloat("sound_volume", 1.0f));
 		}
 		RaycastHit hit, new_hit;
@@ -59,12 +59,12 @@ public class BulletScript : MonoBehaviour {
 						}
 						transform.position += velocity * Time.deltaTime;
 						velocity += Physics.gravity * Time.deltaTime;
-						if(Physics.Linecast(old_pos, transform.position, hit, 1<<0 | 1<<9 | 1<<11)){
+						if(Physics.Linecast(old_pos, transform.position, out hit, 1<<0 | 1<<9 | 1<<11)){
 								GameObject hit_obj = hit.collider.gameObject;
 								GameObject hit_transform_obj = hit.transform.gameObject;
-								ShootableLight light_script  = RecursiveHasScript(hit_obj, "ShootableLight", 1);
-								AimScript aim_script = RecursiveHasScript(hit_obj, "AimScript", 1);
-								RobotScript turret_script = RecursiveHasScript(hit_obj, "RobotScript", 3);
+								ShootableLight light_script  = (ShootableLight)RecursiveHasScript(hit_obj, "ShootableLight", 1);
+								AimScript aim_script = (AimScript)RecursiveHasScript(hit_obj, "AimScript", 1);
+								RobotScript turret_script = (RobotScript)RecursiveHasScript(hit_obj, "RobotScript", 3);
 								transform.position = hit.point;
 								float ricochet_amount = Vector3.Dot(velocity.normalized, hit.normal) * -1;
 								if(Random.Range(0.0f,1.0f) > ricochet_amount && Vector3.Magnitude(velocity) * (1-ricochet_amount) > 10){
@@ -76,7 +76,7 @@ public class BulletScript : MonoBehaviour {
 										PlaySoundFromGroup(sound_hit_ricochet, hostile ? 1 : 0.6f);
 								} else if(turret_script && velocity.magnitude > 100){
 										
-										if(Physics.Linecast(hit.point + velocity.normalized * 0.001f, hit.point + velocity.normalized, new_hit, 1<<11 | 1<<12)){
+										if(Physics.Linecast(hit.point + velocity.normalized * 0.001f, hit.point + velocity.normalized, out new_hit, 1<<11 | 1<<12)){
 												if(new_hit.collider.gameObject.layer == 12){
 														turret_script.WasShotInternal(new_hit.collider.gameObject);
 												}
@@ -135,8 +135,8 @@ public class BulletScript : MonoBehaviour {
 						//Destroy(this.gameObject);
 				}
 				for(var i=0; i<segment; ++i){
-						Color start_color = Color(1,1,1,(1.0f - life_time * 5.0f)*0.05f);
-						Color end_color = Color(1,1,1,(1.0f - death_time * 5.0f)*0.05f);
+						Color start_color = new Color(1,1,1,(1.0f - life_time * 5.0f)*0.05f);
+						Color end_color = new Color(1,1,1,(1.0f - death_time * 5.0f)*0.05f);
 						line_renderer.SetColors(start_color, end_color);
 						if(death_time > 1.0f){
 								Destroy(this.gameObject,0);

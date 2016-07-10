@@ -71,6 +71,7 @@
      <Compile Include="Assets\Scripts\Scripts C#\FPSInputController.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\FlashlightScript.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\GUISkinHolder.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\GunScript.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\Level Script.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\LevelCreatorScript.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\MagScript.cs" />

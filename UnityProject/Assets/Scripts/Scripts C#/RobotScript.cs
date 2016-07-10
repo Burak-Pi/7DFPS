@@ -30,7 +30,7 @@ public class RobotScript : MonoBehaviour {
 		private bool battery_alive = true, motor_alive = true, camera_alive = true, trigger_alive = true
 				, barrel_alive = true, ammo_alive = true, trigger_down, stuck, distance_sleep;
 		private int bullets = 15;
-		private float kAlertDelay = 0.6, kAlertCooldownDelay = 2, alert_delay = 0
+		private float kAlertDelay = 0.6f, kAlertCooldownDelay = 2, alert_delay = 0
 				, alert_cooldown_delay = 0, kMaxRange = 20, rotor_speed = 0, top_rotor_rotation = 0
 				, bottom_rotor_rotation = 0, stuck_delay = 0, kSleepDistance = 20;
 		private Vector3 initial_pos, tilt_correction;
@@ -40,11 +40,11 @@ public class RobotScript : MonoBehaviour {
 		CameraPivotState camera_pivot_state = CameraPivotState.WAIT_DOWN;
 		float camera_pivot_delay = 0, camera_pivot_angle = 0;
 
-		void PlaySoundFromGroup(List<AudioClip> group,float volume){
+		void PlaySoundFromGroup(AudioClip[] group,float volume){
 				if(group.Count == 0){
 						return;
 				}
-				AudioClip which_shot = Random.Range(0,group.Count-1);
+				AudioClip which_shot = Random.Range(0,group.Length-1);
 				audiosource_effect.PlayOneShot(group[which_shot], volume * PlayerPrefs.GetFloat("sound_volume", 1));
 		}
 
@@ -109,11 +109,11 @@ public class RobotScript : MonoBehaviour {
 				}
 		}
 
-		void WasShotInternal(GameObject obj) {
+		public void WasShotInternal(GameObject obj) {
 				Damage(obj);
 		}
 
-		void WasShot(GameObject obj,Vector3 pos,Vector3 vel) {
+		public void WasShot(GameObject obj,Vector3 pos,Vector3 vel) {
 				if(transform.parent && transform.parent.gameObject.name == "gun pivot"){
 						//Multiplying quaternion with a Vector3 returns a vector3 type
 						Vector3 x_axis = transform.FindChild("point_pivot").rotation * Vector3(1,0,0);
@@ -246,9 +246,9 @@ public class RobotScript : MonoBehaviour {
 										Instantiate(muzzle_flash, point_muzzle_flash.position, point_muzzle_flash.rotation);
 										PlaySoundFromGroup(sound_gunshot, 1);
 
-										var bullet = Instantiate(bullet_obj, point_muzzle_flash.position, point_muzzle_flash.rotation);
-										bullet.GetComponent(BulletScript).SetVelocity(point_muzzle_flash.forward * 300);
-										bullet.GetComponent(BulletScript).SetHostile();				
+										GameObject bullet = Instantiate(bullet_obj, point_muzzle_flash.position, point_muzzle_flash.rotation);
+										bullet.GetComponent<BulletScript>().SetVelocity(point_muzzle_flash.forward * 300);
+										bullet.GetComponent<BulletScript>().SetHostile();
 										rotation_x.vel += Random.Range(-50,50);
 										rotation_y.vel += Random.Range(-50,50);
 										--bullets;
@@ -341,7 +341,7 @@ public class RobotScript : MonoBehaviour {
 								break;
 						}
 				}
-				player.GetComponent(MusicScript).AddDangerLevel(danger);
+				player.GetComponent<MusicScript>().AddDangerLevel(danger);
 				if(!camera_alive){
 						GetTurretLightObject().GetComponent<Light>().intensity *= Mathf.Pow(0.01, Time.deltaTime);
 				}
@@ -408,10 +408,10 @@ public class RobotScript : MonoBehaviour {
 						rotor_speed = Mathf.Clamp(rotor_speed, 0, 14);
 
 						var up = transform.rotation * Vector3(0,1,0);
-						var correction : Quaternion;
+						Quaternion correction;
 						correction.SetFromToRotation(up, target_accel.normalized);
-						var correction_vec : Vector3;
-						var correction_angle : float;
+						Vector3 correction_vec;
+						float correction_angle;
 						correction.ToAngleAxis(correction_angle, correction_vec);
 						tilt_correction = correction_vec * correction_angle;
 						tilt_correction -= GetComponent<Rigidbody>().angularVelocity;
@@ -464,7 +464,7 @@ public class RobotScript : MonoBehaviour {
 								gun_delay = 0.1;	
 								Instantiate(muzzle_flash, transform.FindChild("point_spark").position, RandomOrientation());
 								if(Vector3.Distance(transform.FindChild("point_spark").position, GameObject.Find("Player").transform.position) < 1){;
-										GameObject.Find("Player").GetComponent(AimScript).Shock();
+										GameObject.Find("Player").GetComponent<AimScript>().Shock();
 								}
 						}
 				} else {
@@ -537,7 +537,7 @@ public class RobotScript : MonoBehaviour {
 						if(ai_state == AIState.ALERT || ai_state == AIState.ALERT_COOLDOWN){
 								danger += 0.5;
 						}
-						player.GetComponent(MusicScript).AddDangerLevel(danger);
+						player.GetComponent<MusicScript>().AddDangerLevel(danger);
 
 						var camera = transform.FindChild("camera_pivot").FindChild("camera");
 						rel_pos = player.transform.position - camera.position;
@@ -548,7 +548,7 @@ public class RobotScript : MonoBehaviour {
 								}
 						}
 						if(sees_target){
-								var new_target = player.transform.position + player.GetComponent(CharacterMotor).GetVelocity() * 
+								var new_target = player.transform.position + player.GetComponent<CharacterMotor>().GetVelocity() * 
 										Mathf.Clamp(Vector3.Distance(player.transform.position, transform.position) * 0.1, 0.5, 1);
 								switch(ai_state){
 								case AIState.IDLE:
@@ -615,8 +615,8 @@ public class RobotScript : MonoBehaviour {
 				if(!camera_alive){
 						GetDroneLightObject().GetComponent<Light>().intensity *= Mathf.Pow(0.01, Time.deltaTime);
 				}
-				(GetDroneLensFlareObject().GetComponent(LensFlare) as LensFlare).color = GetDroneLightObject().GetComponent<Light>().color;
-				(GetDroneLensFlareObject().GetComponent(LensFlare) as LensFlare).brightness = GetDroneLightObject().GetComponent<Light>().intensity;
+				(GetDroneLensFlareObject().GetComponent<LensFlare>() as LensFlare).color = GetDroneLightObject().GetComponent<Light>().color;
+				(GetDroneLensFlareObject().GetComponent<LensFlare>() as LensFlare).brightness = GetDroneLightObject().GetComponent<Light>().intensity;
 				var target_pitch = rotor_speed * 0.2;
 				target_pitch = Mathf.Clamp(target_pitch, 0.2, 3);
 				audiosource_motor.pitch = Mathf.Lerp(audiosource_motor.pitch, target_pitch, Mathf.Pow(0.0001, Time.deltaTime));
@@ -636,7 +636,7 @@ public class RobotScript : MonoBehaviour {
 				sound_line_of_sight = Mathf.Clamp(sound_line_of_sight,0,1);
 
 				audiosource_motor.volume *= 0.5f + sound_line_of_sight * 0.5;
-				object_audiosource_motor.GetComponent(AudioLowPassFilter).cutoffFrequency = 
+				object_audiosource_motor.GetComponent<AudioLowPassFilter>().cutoffFrequency = 
 						Mathf.Lerp(5000, 44000, sound_line_of_sight);
 		}
 
@@ -652,7 +652,7 @@ public class RobotScript : MonoBehaviour {
 				}
 		}
 
-		void OnCollisionEnter(collision : Collision) {
+		void OnCollisionEnter(Collision collision) {
 				if(robot_type == RobotType.SHOCK_DRONE){
 						if(collision.impactForceSum.magnitude > 10){
 								if(Random.Range(0f,1f)<0.5f && motor_alive){
@@ -666,7 +666,7 @@ public class RobotScript : MonoBehaviour {
 										Damage(transform.FindChild("motor").gameObject);
 								} 
 						} else {
-								var which_shot = Random.Range(0,sound_bump.length);
+								var which_shot = Random.Range(0,sound_bump.Length);
 								audiosource_foley.PlayOneShot(sound_bump[which_shot], collision.impactForceSum.magnitude * 0.15f * PlayerPrefs.GetFloat("sound_volume", 1));
 						}
 				}

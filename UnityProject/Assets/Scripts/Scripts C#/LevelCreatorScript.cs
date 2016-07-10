@@ -20,34 +20,34 @@ public class LevelCreatorScript : MonoBehaviour {
 								child_obj.transform.parent = level.transform;
 						}
 				}
-				var enemies = level_obj.transform.FindChild("enemies");
+				Transform enemies = level_obj.transform.FindChild("enemies");
 				if(enemies){
-						for(var child : Transform in enemies){
-								if(Random.Range(0.0,1.0) <= challenge){
+						foreach(Transform child in enemies){
+								if(Random.Range(0.0f,1.0f) <= challenge){
 										child_obj = Instantiate(child.gameObject, Vector3(0,0,where*20) + child.localPosition + enemies.localPosition, child.localRotation);
 										child_obj.transform.parent = level.transform;
 								}
 						}
 				}
-				var items = level_obj.transform.FindChild("items");
+				Transform items = level_obj.transform.FindChild("items");
 				if(items){
-						for(var child : Transform in items){
-								if(Random.Range(0.0,1.0) <= (player?challenge+0.3:challenge)){
+						foreach(Transform child in items){
+								if(Random.Range(0.0f,1.0f) <= (player?challenge+0.3f:challenge)){
 										child_obj = Instantiate(child.gameObject, Vector3(0,0,where*20) + child.localPosition + items.localPosition, items.localRotation);
 										child_obj.transform.parent = level.transform;
 								}
 						}
 				}
 				if(player){
-						var players = level_obj.transform.FindChild("player_spawn");
+						Transform players = level_obj.transform.FindChild("player_spawn");
 						if(players){
 								var num = 0;
-								for(var child : Transform in players){
+								foreach(Transform child in players){
 										++num;
 								}
 								var save = Random.Range(0,num);
 								var j=0;
-								for(var child : Transform in players){
+								foreach(Transform child in players){
 										if(j == save){
 												child_obj = Instantiate(child.gameObject, Vector3(0,0,where*20) + child.localPosition + players.localPosition, child.localRotation);
 												child_obj.transform.parent = level.transform;
@@ -59,8 +59,8 @@ public class LevelCreatorScript : MonoBehaviour {
 				}
 				level.transform.parent = this.gameObject.transform;
 
-				var lights = GetComponentsInChildren(Light);
-				for(var light : Light in lights){
+				lights = GetComponentsInChildren(Light);
+				foreach(Light light in lights){
 						if(light.enabled && light.shadows == LightShadows.Hard){
 								shadowed_lights.push(light);
 						}
@@ -100,7 +100,7 @@ public class LevelCreatorScript : MonoBehaviour {
 				for(int i=-2; i <= 2; ++i){
 						CreateTileIfNeeded(tile_x+i);
 				}
-				for(Light light in shadowed_lights){
+				foreach(Light light in shadowed_lights){
 						if(!light){
 								Debug.Log("LIGHT IS MISSING");
 						}

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+// Require a character controller to be attached to the same game object
+[RequireComponent (typeof (CharacterMotor))]
+[AddComponentMenu ("Character/Platform Input Controller")]
 public class PlatformInputController : MonoBehaviour {
 
 		// This makes the character turn to face the current movement speed per default.
@@ -67,8 +69,6 @@ public class PlatformInputController : MonoBehaviour {
 				return Vector3.Slerp(from, to, value);
 		}
 
-		// Require a character controller to be attached to the same game object
-		[RequireComponent (typeof (CharacterMotor))]
-		[AddComponentMenu ("Character/Platform Input Controller")]
+
 
 }

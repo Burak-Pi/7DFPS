@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// Require a character controller to be attached to the same game object
+[RequireComponent (typeof (CharacterMotor))]
+[AddComponentMenu ("Character/FPS Input Controller")]
 public class FPSInputController : MonoBehaviour {
 
 		private CharacterMotor motor;
@@ -56,11 +59,5 @@ public class FPSInputController : MonoBehaviour {
 				motor.inputJump = Input.GetButton("Jump");	
 		}
 
-		void FixedUpdate() {
-		}
-
-		// Require a character controller to be attached to the same game object
-		[RequireComponent (typeof (CharacterMotor))]
-		[AddComponentMenu ("Character/FPS Input Controller")]
 
 }

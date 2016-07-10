@@ -2,14 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 
+// Require a character controller to be attached to the same game object
+[RequireComponent (typeof (CharacterController))]
+[AddComponentMenu ("Character/Character Motor")]
+
 public class CharacterMotor : MonoBehaviour {
 
 		private float kStandHeight= 2, kCrouchHeight= 1, step_timer= 0, head_bob= 0, running= 0;
 		private bool crouching= false;
 
-		AudioClip[] sound_footstep_jump_concrete, sound_footstep_run_concrete, sound_footstep_walk_concrete, sound_footstep_crouchwalk_concrete;
+		public AudioClip[] sound_footstep_jump_concrete, sound_footstep_run_concrete, sound_footstep_walk_concrete, sound_footstep_crouchwalk_concrete;
 
-		AimScript.Spring height_spring= new AimScript.Spring(0,0,100,0.00001f);
+		public AimScript.Spring height_spring= new AimScript.Spring(0,0,100,0.00001f);
 				Vector3 die_dir;
 
 				// Does this script currently respond to input?
@@ -17,8 +21,8 @@ public class CharacterMotor : MonoBehaviour {
 
 				bool  useFixedUpdate = true;
 
-		void  PlaySoundFromGroup (List<AudioClip> group, float volume){
-				AudioClip which_shot= Random.Range(0,group.Count-1);
+		public void  PlaySoundFromGroup (AudioClip[] group, float volume){
+				int which_shot= Random.Range(0,group.Length);
 						GetComponent<AudioSource>().PlayOneShot(group[which_shot], volume * PlayerPrefs.GetFloat("sound_volume", 1.0f));
 				}
 
@@ -27,18 +31,18 @@ public class CharacterMotor : MonoBehaviour {
 
 				// The current global direction we want the character to move in.
 				[System.NonSerialized]
-				Vector3 inputMoveDirection = Vector3.zero;
+				public Vector3 inputMoveDirection = Vector3.zero;
 
 				// Is the jump button held down? We use this interface instead of checking
 				// for the jump button directly so this script can also be used by AIs.
 				[System.NonSerialized]
-				bool  inputJump = false;
+		public bool  inputJump;
 
-				void  SetRunning ( float val  ){
+				public void  SetRunning ( float val  ){
 						running = val;
 				}
 
-				float GetRunning (){
+		public float GetRunning (){
 						return running;
 				}
 
@@ -199,7 +203,7 @@ public class CharacterMotor : MonoBehaviour {
 						tr = transform;
 				}
 
-				void  GetVelocity (){
+		public void  GetVelocity (){
 						return movement.velocity;
 				}
 
@@ -582,7 +586,7 @@ public class CharacterMotor : MonoBehaviour {
 						}
 				}
 
-				private void  SubtractNewPlatformVelocity (){
+		private IEnumerable  SubtractNewPlatformVelocity (){
 						// When landing, subtract the velocity of the new ground from the character's velocity
 						// since movement in ground is relative to the movement of the ground.
 						if (movingPlatform.enabled &&
@@ -698,7 +702,5 @@ public class CharacterMotor : MonoBehaviour {
 						SendMessage("OnExternalVelocity");
 				}
 
-				// Require a character controller to be attached to the same game object
-		[RequireComponent (typeof (CharacterController))]
-		[AddComponentMenu ("Character/Character Motor")]
 }
+

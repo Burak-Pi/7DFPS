@@ -3,26 +3,26 @@ using System.Collections;
 
 public class OptionsMenuScript : MonoBehaviour {
 
-		GUISkin skin;
-		Rect windowRect;
-		float menu_width = 300, menu_height = 500;
-		bool show_menu;
+		public GUISkin skin;
+		public Rect windowRect;
+		public float menu_width = 300, menu_height = 500;
+		public bool show_menu;
 
-		void OnApplicationPause() {  
+		public void OnApplicationPause() {  
 			Screen.lockCursor = false;
 		}
 
-		void OnApplicationFocus() {
+		public void OnApplicationFocus() {
 			if(!show_menu){
 				Screen.lockCursor = true;
 			}
 		}
 
-		void ShowMenu(){
+		public 	void ShowMenu(){
 			show_menu = true;
 		}
 
-		void HideMenu(){
+		public void HideMenu(){
 			show_menu = false;
 		}
 
@@ -42,25 +42,25 @@ public class OptionsMenuScript : MonoBehaviour {
 		private Vector2 draw_cursor, draw_cursor_line;
 		private float line_height = 24, line_offset = 24;
 
-		void DrawCursor_Init() {
+		public void DrawCursor_Init() {
 				draw_cursor = Vector2(25,25);
 				draw_cursor_line = Vector2(0,0);	
 		}
 
-		void DrawCursor_NextLine() {
+		public void DrawCursor_NextLine() {
 				draw_cursor_line = Vector2(0,0);	
 				draw_cursor.y += line_offset;
 		}
 
-		void DrawCursor_Offset(float val) {
+		public void DrawCursor_Offset(float val) {
 				draw_cursor_line.x += val;	
 		}
 
-		Vector2 DrawCursor_Get() {
+		public Vector2 DrawCursor_Get() {
 				return draw_cursor + draw_cursor_line;
 		}
 		Rect rect;
-		Rect DrawCursor_RectSpace(float width){
+		public Rect DrawCursor_RectSpace(float width){
 				rect = new Rect(draw_cursor.x + draw_cursor_line.x,
 						draw_cursor.y + draw_cursor_line.y,
 						width,
@@ -69,7 +69,7 @@ public class OptionsMenuScript : MonoBehaviour {
 				return rect;
 		}
 
-		void DrawLabel(string _text) {
+		public void DrawLabel(string _text) {
 				DrawCursor_Offset(17);
 				GUI.Label (
 						DrawCursor_RectSpace(400),//GUI.skin.label.CalcSize(new GUIContent(text)).x), 
@@ -77,7 +77,8 @@ public class OptionsMenuScript : MonoBehaviour {
 						skin.label);
 		}
 
-		bool DrawCheckbox(bool val,string text) {
+
+		public bool DrawCheckbox(bool val,string text) {
 				val = GUI.Toggle (
 						DrawCursor_RectSpace(400), 
 						val,
@@ -86,7 +87,7 @@ public class OptionsMenuScript : MonoBehaviour {
 				return val;			
 		}
 
-		float DrawSlider(float val){
+		public float DrawSlider(float val){
 				DrawCursor_Offset(18);
 				val = GUI.HorizontalSlider (
 						DrawCursor_RectSpace(400 - draw_cursor_line.x), 
@@ -96,7 +97,7 @@ public class OptionsMenuScript : MonoBehaviour {
 				return val;			
 		}
 
-		bool DrawButton(string _text){
+		public bool DrawButton(string _text){
 				var val = GUI.Button (
 						DrawCursor_RectSpace(200), 
 						_text,
@@ -110,7 +111,7 @@ public class OptionsMenuScript : MonoBehaviour {
 		private bool lock_gun_to_center, mouse_invert, show_advanced_sound, toggle_crouch = true;
 		private Vector2 scroll_view_vector = Vector2.zero;
 
-		void RestoreDefaults() {
+		public void RestoreDefaults() {
 				master_volume = 1;
 				sound_volume = 1;
 				music_volume = 1;
@@ -136,7 +137,7 @@ public class OptionsMenuScript : MonoBehaviour {
 		}
 
 
-		void SavePrefs() {
+		public void SavePrefs() {
 				PlayerPrefs.SetFloat("master_volume", master_volume);
 				PlayerPrefs.SetFloat("sound_volume", sound_volume);
 				PlayerPrefs.SetFloat("music_volume", music_volume);
@@ -148,7 +149,7 @@ public class OptionsMenuScript : MonoBehaviour {
 				PlayerPrefs.SetFloat("gun_distance", gun_distance);    
 		}
 
-		bool IsMenuShown(){
+		public bool IsMenuShown(){
 			return show_menu;
 		}
 

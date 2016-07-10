@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class ShellCasingScript : MonoBehaviour {
 
 				AudioClip[] sound_shell_bounce;
-				bool collided = false;
+				public bool collided = false;
 				Vector3 old_pos;
 		float life_time= 0.0f, glint_delay= 0, glint_progress= 0;
 				private Light glint_light;

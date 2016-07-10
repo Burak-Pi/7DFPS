@@ -11,9 +11,9 @@ public class MusicScript : MonoBehaviour {
 		private float[] target_gain;
 		private float danger = 0, global_gain = 1, target_global_gain = 1
 				, gain_recover_delay = 0, danger_level_accumulate = 0,  mystical = 0;
-		enum MusicEvent {DEAD, WON};
+		public enum MusicEvent {DEAD, WON};
 
-		void HandleEvent(MusicEvent _event){
+		public void HandleEvent(MusicEvent _event){
 				switch(_event){
 				case MusicEvent.DEAD:
 						target_global_gain = 0;
@@ -28,11 +28,11 @@ public class MusicScript : MonoBehaviour {
 				}
 		}
 
-		void AddDangerLevel(float val) {
+		public void AddDangerLevel(float val) {
 			danger_level_accumulate += val;
 		}
 
-		void SetMystical(float val) {
+		public void SetMystical(float val) {
 				mystical = val;
 		}
 

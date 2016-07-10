@@ -50,7 +50,7 @@ public class ShootableLight : MonoBehaviour {
 
 
 
-		void WasShot(GameObject obj, Vector3 pos, Vector3 vel) {
+		public void WasShot(GameObject obj, Vector3 pos, Vector3 vel) {
 				if(!destroyed){
 						destroyed = true;
 						light_amount = 0;

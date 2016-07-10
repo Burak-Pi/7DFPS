@@ -16,14 +16,14 @@ public class FlashlightScript : MonoBehaviour {
 				battery_life_remaining = Random.Range(max_battery_life*0.2f, max_battery_life);
 		}
 
-		void TurnOn(){
+		public void TurnOn(){
 				if(!switch_on){
 						switch_on = true;
 						GetComponent<AudioSource>().PlayOneShot(sound_turn_on, kSoundVolume * PlayerPrefs.GetFloat("sound_volume", 1));
 				}
 		}
 
-		void TurnOff(){
+		public void TurnOff(){
 				if(switch_on){
 						switch_on = false;
 						GetComponent<AudioSource>().PlayOneShot(sound_turn_off, kSoundVolume * PlayerPrefs.GetFloat("sound_volume", 1));

@@ -6,7 +6,7 @@ public class MagScript : MonoBehaviour {
 		private int num_rounds = 8;
 		int kMaxRounds = 8;
 		private Vector3[] round_pos;
-		private Vector3 old_pos, hold_offset, hold_rotation;
+		public  Vector3 old_pos, hold_offset, hold_rotation;
 		private Quaternion[] round_rot;
 		bool collided, disable_interp = true;
 		AudioClip[] sound_add_round, sound_mag_bounce;
@@ -14,7 +14,7 @@ public class MagScript : MonoBehaviour {
 		enum MagLoadStage {NONE, PUSHING_DOWN, ADDING_ROUND, REMOVING_ROUND, PUSHING_UP};
 		MagLoadStage mag_load_stage = MagLoadStage.NONE;
 
-		bool RemoveRound() {
+		public bool RemoveRound() {
 				if(num_rounds == 0){
 						return false;
 				}
@@ -24,7 +24,7 @@ public class MagScript : MonoBehaviour {
 				return true;
 		}
 
-		bool RemoveRoundAnimated() {
+		public bool RemoveRoundAnimated() {
 				if(num_rounds == 0 || mag_load_stage != MagLoadStage.NONE){
 						return false;
 				}
@@ -33,11 +33,11 @@ public class MagScript : MonoBehaviour {
 				return true;
 		}
 
-		bool IsFull(){
+		public bool IsFull(){
 			return num_rounds == kMaxRounds;
 		}
 
-		bool AddRound() {
+		public bool AddRound() {
 				if(num_rounds >= kMaxRounds || mag_load_stage != MagLoadStage.NONE){
 						return false;
 				}
@@ -50,7 +50,7 @@ public class MagScript : MonoBehaviour {
 				return true;
 		}
 
-		int NumRounds(){
+		public int NumRounds(){
 				return num_rounds;
 		}
 
