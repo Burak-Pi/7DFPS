@@ -66,6 +66,7 @@
      <Compile Include="Assets\Scripts\Scripts C#\ApplySelectedPrefabs.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\BulletPileScript.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\BulletScript.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\CharacterMotor.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\ElectricSparkScript.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\FPSInputController.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\FlashlightScript.cs" />
@@ -75,10 +76,17 @@
      <Compile Include="Assets\Scripts\Scripts C#\MagScript.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\MusicScript.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\MuzzleFlashScript.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\OptionsMenuScript.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\PlasterPuffScript.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\PlatformInputController.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\References.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\RobotScript.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\ShellCasingScript.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\ShootableLight.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\SparkEffect.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\TapeScript.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\TaserSpark.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\WeaponHolder.cs" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\NoiseEffectShaderRGB.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\SeparableWeightedBlurDof34.shader" />

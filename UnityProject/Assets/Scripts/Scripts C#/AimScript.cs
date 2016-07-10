@@ -174,7 +174,7 @@ private Quaternion flashlight_aim_rot;
 		private bool dying, dead, won;
 
 		bool IsAiming() {
-				return (gun_instance != null && aim_spring.target_state == 1.0);
+				return (gun_instance != null && aim_spring.target_state == 1.0f);
 		}
 
 		bool IsDead() {
@@ -195,10 +195,10 @@ private Quaternion flashlight_aim_rot;
 				rotation_y += Random.Range(-4,4);
 				if(!god_mode && !won){
 						dying = true;
-						if(Random.Range(0.0,1.0) < 0.3){
+						if(Random.Range(0.0f,1.0f) < 0.3){
 								SetDead(true);
 						}
-						if(dead && Random.Range(0.0,1.0) < 0.3){
+						if(dead && Random.Range(0.0f,1.0f) < 0.3){
 								dead_fade += 0.3;
 						}
 				}
@@ -208,7 +208,7 @@ private Quaternion flashlight_aim_rot;
 				if(!god_mode && !won){
 						SetDead(true);
 						head_fall_vel = vel.y;
-						dead_fade = Mathf.Max(dead_fade, 0.5);
+						dead_fade = Mathf.Max(dead_fade, 0.5f);
 						head_recoil_spring_x.vel += Random.Range(-400,400);
 						head_recoil_spring_y.vel += Random.Range(-400,400);
 				}
@@ -222,7 +222,7 @@ private Quaternion flashlight_aim_rot;
 		void Shock() {
 				if(!god_mode && !won){
 						if(!dead){
-								PlaySoundFromGroup(sound_electrocute, 1.0);
+								PlaySoundFromGroup(sound_electrocute, 1.0f);
 						}
 						SetDead(true);
 				}
@@ -254,7 +254,7 @@ private Quaternion flashlight_aim_rot;
 
 		void PlaySoundFromGroup(List<AudioClip> group, float volume){
 				int which_shot = Random.Range(0,(group.Count-1));
-				GetComponent<AudioSource>().PlayOneShot(group[which_shot], volume * PlayerPrefs.GetFloat("sound_volume", 1.0));
+				GetComponent<AudioSource>().PlayOneShot(group[which_shot], volume * PlayerPrefs.GetFloat("sound_volume", 1.0f));
 		}
 
 		void AddLooseBullet(bool spring) {
@@ -276,9 +276,9 @@ private Quaternion flashlight_aim_rot;
 				gun_obj = weapon_holder.gun_object;
 				casing_with_bullet = weapon_holder.bullet_object;
 
-				if(Random.Range(0.0,1.0) < 0.35){
+				if(Random.Range(0.0f,1.0f) < 0.35){
 						held_flashlight = Instantiate(holder.flashlight_object);
-						Destroy(held_flashlight.GetComponent.<Rigidbody>());
+						Destroy(held_flashlight.GetComponent<Rigidbody>());
 						held_flashlight.GetComponent(FlashlightScript).TurnOn();
 						holder.has_flashlight = true;
 				}
@@ -336,7 +336,7 @@ private Quaternion flashlight_aim_rot;
 		}
 
 		function GunDist() {
-				return kGunDistance * (0.5 + PlayerPrefs.GetFloat("gun_distance", 1.0)*0.5);
+				return kGunDistance * (0.5 + PlayerPrefs.GetFloat("gun_distance", 1.0f)*0.5f);
 		}
 
 		function AimPos() : Vector3 {
@@ -346,8 +346,8 @@ private Quaternion flashlight_aim_rot;
 
 		function AimDir() : Vector3 {
 				var aim_rot = Quaternion();
-				aim_rot.SetEulerAngles(-rotation_y * Mathf.PI / 180.0, rotation_x * Mathf.PI / 180.0, 0.0);
-				return aim_rot * Vector3(0.0,0.0,1.0);
+				aim_rot.SetEulerAngles(-rotation_y * Mathf.PI / 180.0f, rotation_x * Mathf.PI / 180.0f, 0.0f);
+				return aim_rot * Vector3(0.0f,0.0f,1.0f);
 		}
 
 		function GetGunScript() : GunScript {
@@ -377,13 +377,13 @@ private Quaternion flashlight_aim_rot;
 		function ShouldPickUpNearby() : boolean {
 				var nearest_mag = null;
 				var nearest_mag_dist = 0;
-				var colliders = Physics.OverlapSphere(main_camera.transform.position, 2.0, 1 << 8);
+				var colliders = Physics.OverlapSphere(main_camera.transform.position, 2.0f, 1 << 8);
 				for(var collider in colliders){
-						if(magazine_obj && collider.gameObject.name == magazine_obj.name+"(Clone)" && collider.gameObject.GetComponent.<Rigidbody>()){
+						if(magazine_obj && collider.gameObject.name == magazine_obj.name+"(Clone)" && collider.gameObject.GetComponent<Rigidbody>()){
 								if(mag_stage == HandMagStage.EMPTY){
 										return true;
 								}	
-						} else if((collider.gameObject.name == casing_with_bullet.name || collider.gameObject.name == casing_with_bullet.name+"(Clone)") && collider.gameObject.GetComponent.<Rigidbody>()){
+						} else if((collider.gameObject.name == casing_with_bullet.name || collider.gameObject.name == casing_with_bullet.name+"(Clone)") && collider.gameObject.GetComponent<Rigidbody>()){
 								return true;
 						}
 				}
@@ -393,27 +393,27 @@ private Quaternion flashlight_aim_rot;
 		function HandleGetControl(){
 				var nearest_mag = null;
 				var nearest_mag_dist = 0;
-				var colliders = Physics.OverlapSphere(main_camera.transform.position, 2.0, 1 << 8);
+				var colliders = Physics.OverlapSphere(main_camera.transform.position, 2.0f, 1 << 8);
 				for(var collider in colliders){
-						if(magazine_obj && collider.gameObject.name == magazine_obj.name+"(Clone)" && collider.gameObject.GetComponent.<Rigidbody>()){
+						if(magazine_obj && collider.gameObject.name == magazine_obj.name+"(Clone)" && collider.gameObject.GetComponent<Rigidbody>()){
 								var dist = Vector3.Distance(collider.transform.position, main_camera.transform.position);
 								if(!nearest_mag || dist < nearest_mag_dist){	
 										nearest_mag_dist = dist;
 										nearest_mag = collider.gameObject;
 								}					
-						} else if((collider.gameObject.name == casing_with_bullet.name || collider.gameObject.name == casing_with_bullet.name+"(Clone)") && collider.gameObject.GetComponent.<Rigidbody>()){
+						} else if((collider.gameObject.name == casing_with_bullet.name || collider.gameObject.name == casing_with_bullet.name+"(Clone)") && collider.gameObject.GetComponent<Rigidbody>()){
 								collected_rounds.push(collider.gameObject);			
-								collider.gameObject.GetComponent.<Rigidbody>().useGravity = false;
-								collider.gameObject.GetComponent.<Rigidbody>().WakeUp();
+								collider.gameObject.GetComponent<Rigidbody>().useGravity = false;
+								collider.gameObject.GetComponent<Rigidbody>().WakeUp();
 								collider.enabled = false;
-						} else if(collider.gameObject.name == "cassette_tape(Clone)" && collider.gameObject.GetComponent.<Rigidbody>()){
+						} else if(collider.gameObject.name == "cassette_tape(Clone)" && collider.gameObject.GetComponent<Rigidbody>()){
 								collected_rounds.push(collider.gameObject);			
-								collider.gameObject.GetComponent.<Rigidbody>().useGravity = false;
-								collider.gameObject.GetComponent.<Rigidbody>().WakeUp();
+								collider.gameObject.GetComponent<Rigidbody>().useGravity = false;
+								collider.gameObject.GetComponent<Rigidbody>().WakeUp();
 								collider.enabled = false;
-						} else if(collider.gameObject.name == "flashlight_object(Clone)" && collider.gameObject.GetComponent.<Rigidbody>() && !held_flashlight){
+						} else if(collider.gameObject.name == "flashlight_object(Clone)" && collider.gameObject.GetComponent<Rigidbody>() && !held_flashlight){
 								held_flashlight = collider.gameObject;
-								Destroy(held_flashlight.GetComponent.<Rigidbody>());
+								Destroy(held_flashlight.GetComponent<Rigidbody>());
 								held_flashlight.GetComponent(FlashlightScript).TurnOn();
 								holder.has_flashlight = true;
 								flash_ground_pos = held_flashlight.transform.position;
@@ -424,7 +424,7 @@ private Quaternion flashlight_aim_rot;
 				}
 				if(nearest_mag && mag_stage == HandMagStage.EMPTY){
 						magazine_instance_in_hand = nearest_mag;
-						Destroy(magazine_instance_in_hand.GetComponent.<Rigidbody>());
+						Destroy(magazine_instance_in_hand.GetComponent<Rigidbody>());
 						mag_ground_pos = magazine_instance_in_hand.transform.position;
 						mag_ground_rot = magazine_instance_in_hand.transform.rotation;
 						mag_ground_pose_spring.state = 1;
@@ -729,11 +729,11 @@ private Quaternion flashlight_aim_rot;
 				}
 
 				for(var i = 0; i < kMaxHeadRecoil; ++i){
-						if(head_recoil_delay[i] != -1.0){
+						if(head_recoil_delay[i] != -1.0f){
 								head_recoil_delay[i] -= Time.deltaTime;
-								if(head_recoil_delay[i] <= 0.0){
-										head_recoil_spring_x.vel += Random.Range(-30.0,30.0);
-										head_recoil_spring_y.vel += Random.Range(-30.0,30.0);
+								if(head_recoil_delay[i] <= 0.0f){
+										head_recoil_spring_x.vel += Random.Range(-30.0f,30.0f);
+										head_recoil_spring_y.vel += Random.Range(-30.0f,30.0f);
 										head_recoil_delay[i] = -1;
 								}
 						}
@@ -745,8 +745,8 @@ private Quaternion flashlight_aim_rot;
 						if(mag_stage == HandMagStage.HOLD){
 								mag_stage = HandMagStage.EMPTY;
 								magazine_instance_in_hand.AddComponent(Rigidbody);
-								magazine_instance_in_hand.GetComponent.<Rigidbody>().interpolation = RigidbodyInterpolation.Interpolate;
-								magazine_instance_in_hand.GetComponent.<Rigidbody>().velocity = character_controller.velocity;
+								magazine_instance_in_hand.GetComponent<Rigidbody>().interpolation = RigidbodyInterpolation.Interpolate;
+								magazine_instance_in_hand.GetComponent<Rigidbody>().velocity = character_controller.velocity;
 								magazine_instance_in_hand = null;
 								queue_drop = false;
 						}
@@ -788,7 +788,7 @@ private Quaternion flashlight_aim_rot;
 						aim_toggle = !aim_toggle;
 				}
 				if(Input.GetButtonDown("Slow Motion Toggle") && slomo_mode){
-						if(Time.timeScale == 1.0){
+						if(Time.timeScale == 1.0f){
 								Time.timeScale = 0.1;
 						} else {
 								Time.timeScale = 1;
@@ -797,9 +797,9 @@ private Quaternion flashlight_aim_rot;
 		}
 
 		function StartTapePlay() {
-				GetComponent.<AudioSource>().PlayOneShot(holder.sound_tape_start, 1.0 * PlayerPrefs.GetFloat("voice_volume", 1.0));
+				GetComponent<AudioSource>().PlayOneShot(holder.sound_tape_start, 1.0 * PlayerPrefs.GetFloat("voice_volume", 1.0f));
 				audiosource_tape_background.Play();
-				if(tape_in_progress && start_tape_delay == 0.0){ 
+				if(tape_in_progress && start_tape_delay == 0.0f){ 
 						audiosource_audio_content.Play();
 				}
 				if(!tape_in_progress && tapes_remaining.length > 0){
@@ -807,7 +807,7 @@ private Quaternion flashlight_aim_rot;
 						tapes_remaining.RemoveAt(0);
 						//audiosource_audio_content.pitch = 10;
 						//audiosource_audio_content.clip = holder.sound_scream[Random.Range(0,holder.sound_scream.length)];
-						start_tape_delay = Random.Range(0.5,3.0);
+						start_tape_delay = Random.Range(0.5,3.0f);
 						stop_tape_delay = 0;
 						tape_in_progress = true;
 				}
@@ -816,7 +816,7 @@ private Quaternion flashlight_aim_rot;
 		}
 
 		function StopTapePlay() {
-				GetComponent.<AudioSource>().PlayOneShot(holder.sound_tape_end, 1.0 * PlayerPrefs.GetFloat("voice_volume", 1.0));
+				GetComponent<AudioSource>().PlayOneShot(holder.sound_tape_end, 1.0 * PlayerPrefs.GetFloat("voice_volume", 1.0f));
 				if(tape_in_progress){
 						audiosource_tape_background.Pause();
 						audiosource_audio_content.Pause();
@@ -857,7 +857,7 @@ private Quaternion flashlight_aim_rot;
 				} else if(iddqd_progress == 4 && Input.GetKeyDown('d')){
 						iddqd_progress = 0;
 						god_mode = !god_mode; 
-						PlaySoundFromGroup(holder.sound_scream, 1.0);
+						PlaySoundFromGroup(holder.sound_scream, 1.0f);
 				}
 				if(idkfa_progress == 0 && Input.GetKeyDown('i')){
 						++idkfa_progress; cheat_delay = 1;
@@ -875,7 +875,7 @@ private Quaternion flashlight_aim_rot;
 						while(loose_bullets.length < 30){
 								AddLooseBullet(true);
 						}
-						PlaySoundFromGroup(holder.sound_scream, 1.0);
+						PlaySoundFromGroup(holder.sound_scream, 1.0f);
 				}
 				if(slomo_progress == 0 && Input.GetKeyDown('s')){
 						++slomo_progress; cheat_delay = 1;
@@ -888,16 +888,16 @@ private Quaternion flashlight_aim_rot;
 				} else if(slomo_progress == 4 && Input.GetKeyDown('o')){
 						slomo_progress = 0;
 						slomo_mode = true;
-						if(Time.timeScale == 1.0){
+						if(Time.timeScale == 1.0f){
 								Time.timeScale = 0.1;
 						} else {
 								Time.timeScale = 1;
 						}
-						PlaySoundFromGroup(holder.sound_scream, 1.0);
+						PlaySoundFromGroup(holder.sound_scream, 1.0f);
 				}
-				if(cheat_delay > 0.0){
+				if(cheat_delay > 0.0f){
 						cheat_delay -= Time.deltaTime;
-						if(cheat_delay <= 0.0){
+						if(cheat_delay <= 0.0f){
 								cheat_delay = 0;
 								iddqd_progress = 0;
 								idkfa_progress = 0;
@@ -919,23 +919,23 @@ private Quaternion flashlight_aim_rot;
 						}
 				}
 				if(tape_in_progress && audiosource_tape_background.isPlaying){ 
-						GetComponent(MusicScript).SetMystical((tapes_heard.length+1.0)/total_tapes.length);
-						audiosource_tape_background.volume = PlayerPrefs.GetFloat("voice_volume", 1.0);
-						audiosource_tape_background.pitch = Mathf.Min(1.0,audiosource_audio_content.pitch + Time.deltaTime * 3.0);
-						audiosource_audio_content.volume = PlayerPrefs.GetFloat("voice_volume", 1.0);
-						audiosource_audio_content.pitch = Mathf.Min(1.0,audiosource_audio_content.pitch + Time.deltaTime * 3.0);
+						GetComponent(MusicScript).SetMystical((tapes_heard.length+1.0f)/total_tapes.length);
+						audiosource_tape_background.volume = PlayerPrefs.GetFloat("voice_volume", 1.0f);
+						audiosource_tape_background.pitch = Mathf.Min(1.0f,audiosource_audio_content.pitch + Time.deltaTime * 3.0f);
+						audiosource_audio_content.volume = PlayerPrefs.GetFloat("voice_volume", 1.0f);
+						audiosource_audio_content.pitch = Mathf.Min(1.0f,audiosource_audio_content.pitch + Time.deltaTime * 3.0f);
 						//audiosource_audio_content.pitch = 10;
 						//audiosource_audio_content.volume = 0.1;
-						if(start_tape_delay > 0.0){
+						if(start_tape_delay > 0.0f){
 								if(!audiosource_audio_content.isPlaying){
-										start_tape_delay = Mathf.Max(0.0, start_tape_delay - Time.deltaTime);
-										if(start_tape_delay == 0.0){
+										start_tape_delay = Mathf.Max(0.0f, start_tape_delay - Time.deltaTime);
+										if(start_tape_delay == 0.0f){
 												audiosource_audio_content.Play();
 										}
 								}
-						} else if(stop_tape_delay > 0.0){
-								stop_tape_delay = Mathf.Max(0.0, stop_tape_delay - Time.deltaTime);
-								if(stop_tape_delay == 0.0){
+						} else if(stop_tape_delay > 0.0f){
+								stop_tape_delay = Mathf.Max(0.0f, stop_tape_delay - Time.deltaTime);
+								if(stop_tape_delay == 0.0f){
 										tape_in_progress = false;
 										tapes_heard.push(audiosource_audio_content.clip);
 										StopTapePlay();
@@ -944,7 +944,7 @@ private Quaternion flashlight_aim_rot;
 										}
 								}
 						} else if(!audiosource_audio_content.isPlaying){
-								stop_tape_delay = Random.Range(0.5,3.0);
+								stop_tape_delay = Random.Range(0.5,3.0f);
 						}
 				}
 		}
@@ -953,7 +953,7 @@ private Quaternion flashlight_aim_rot;
 				if(dying){
 						health -= Time.deltaTime;
 				}
-				if(health <= 0.0){
+				if(health <= 0.0f){
 						health = 0;
 						SetDead(true);
 						dying = false;
@@ -963,7 +963,7 @@ private Quaternion flashlight_aim_rot;
 		function UpdateHelpToggle() {
 				if(Input.GetButton("Help Toggle")){
 						help_hold_time += Time.deltaTime;
-						if(show_help && help_hold_time >= 1.0){
+						if(show_help && help_hold_time >= 1.0f){
 								show_advanced_help = true;
 						}
 				}
@@ -991,8 +991,8 @@ private Quaternion flashlight_aim_rot;
 				if(level_reset_hold != 0.0 && Input.GetButton("Level Reset")){
 						level_reset_hold += Time.deltaTime; 
 						dead_volume_fade = Mathf.Min(1.0-level_reset_hold * 0.5, dead_volume_fade);
-						dead_fade = level_reset_hold * 0.5;
-						if(level_reset_hold >= 2.0){
+						dead_fade = level_reset_hold * 0.5f;
+						if(level_reset_hold >= 2.0f){
 								Application.LoadLevel(Application.loadedLevel);
 								level_reset_hold = 0;
 						}
@@ -1003,26 +1003,26 @@ private Quaternion flashlight_aim_rot;
 
 		function UpdateLevelEndEffects() {
 				if(won){
-						win_fade = Mathf.Min(1.0, win_fade + Time.deltaTime * 0.1);
-						dead_volume_fade = Mathf.Max(0.0, dead_volume_fade - Time.deltaTime * 0.1);
+						win_fade = Mathf.Min(1.0f, win_fade + Time.deltaTime * 0.1);
+						dead_volume_fade = Mathf.Max(0.0f, dead_volume_fade - Time.deltaTime * 0.1);
 				} else if(dead){
-						dead_fade = Mathf.Min(1.0, dead_fade + Time.deltaTime * 0.3);
-						dead_volume_fade = Mathf.Max(0.0, dead_volume_fade - Time.deltaTime * 0.23);
+						dead_fade = Mathf.Min(1.0f, dead_fade + Time.deltaTime * 0.3);
+						dead_volume_fade = Mathf.Max(0.0f, dead_volume_fade - Time.deltaTime * 0.23);
 						head_fall_vel -= 9.8 * Time.deltaTime;
 						head_fall += head_fall_vel * Time.deltaTime;
 						head_tilt += head_tilt_vel * Time.deltaTime;
 						view_rotation_x += head_tilt_x_vel * Time.deltaTime;
 						view_rotation_y += head_tilt_y_vel * Time.deltaTime;
 						var min_fall = character_controller.height * character_controller.transform.localScale.y * -1;
-						if(head_fall < min_fall && head_fall_vel < 0.0){			
-								if(Mathf.Abs(head_fall_vel) > 0.5){
+						if(head_fall < min_fall && head_fall_vel < 0.0f){			
+								if(Mathf.Abs(head_fall_vel) > 0.5f){
 										head_recoil_spring_x.vel += Random.Range(-10,10) * Mathf.Abs(head_fall_vel);
 										head_recoil_spring_y.vel += Random.Range(-10,10) * Mathf.Abs(head_fall_vel);
 										head_tilt_vel = 0;
 										head_tilt_x_vel = 0;
 										head_tilt_y_vel = 0;
 										if(!dead_body_fell){
-												PlaySoundFromGroup(sound_body_fall, 1.0);
+												PlaySoundFromGroup(sound_body_fall, 1.0f);
 												dead_body_fell = true;
 										}
 								}
@@ -1030,16 +1030,16 @@ private Quaternion flashlight_aim_rot;
 						}
 						head_fall = Mathf.Max(min_fall,head_fall);
 				} else {
-						dead_fade = Mathf.Max(0.0, dead_fade - Time.deltaTime * 1.5);
-						dead_volume_fade = Mathf.Min(1.0, dead_volume_fade + Time.deltaTime * 1.5);
+						dead_fade = Mathf.Max(0.0f, dead_fade - Time.deltaTime * 1.5f);
+						dead_volume_fade = Mathf.Min(1.0f, dead_volume_fade + Time.deltaTime * 1.5f);
 				}
 		}
 
 		function UpdateLevelChange() {
-				if((dead && dead_volume_fade <= 0.0)){ 
+				if((dead && dead_volume_fade <= 0.0f)){ 
 						Application.LoadLevel(Application.loadedLevel);
 				}
-				if(won && dead_volume_fade <= 0.0){ 
+				if(won && dead_volume_fade <= 0.0f){ 
 						Application.LoadLevel("winscene");
 				}
 		}
@@ -1058,8 +1058,8 @@ private Quaternion flashlight_aim_rot;
 						if(Physics.Linecast(main_camera.transform.position, AimPos() + AimDir() * 0.2, hit, 1 << 0)){
 								aim_spring.target_state = Mathf.Clamp(
 										1.0 - (Vector3.Distance(hit.point, main_camera.transform.position)/(GunDist() + 0.2)),
-										0.0,
-										1.0);
+										0.0f,
+										1.0f);
 								offset_aim_target = true;
 						}
 				} else {
@@ -1072,9 +1072,9 @@ private Quaternion flashlight_aim_rot;
 		}
 
 		function UpdateCameraRotationControls() {
-				rotation_y_min_leeway = Mathf.Lerp(0.0,kRotationYMinLeeway,aim_spring.state);
-				rotation_y_max_leeway = Mathf.Lerp(0.0,kRotationYMaxLeeway,aim_spring.state);
-				rotation_x_leeway = Mathf.Lerp(0.0,kRotationXLeeway,aim_spring.state);
+				rotation_y_min_leeway = Mathf.Lerp(0.0f,kRotationYMinLeeway,aim_spring.state);
+				rotation_y_max_leeway = Mathf.Lerp(0.0f,kRotationYMaxLeeway,aim_spring.state);
+				rotation_x_leeway = Mathf.Lerp(0.0f,kRotationXLeeway,aim_spring.state);
 
 				if(PlayerPrefs.GetInt("lock_gun_to_center", 0)==1){
 						rotation_y_min_leeway = 0;
@@ -1082,8 +1082,8 @@ private Quaternion flashlight_aim_rot;
 						rotation_x_leeway = 0;
 				}
 
-				sensitivity_x = PlayerPrefs.GetFloat("mouse_sensitivity", 1.0) * 10;
-				sensitivity_y = PlayerPrefs.GetFloat("mouse_sensitivity", 1.0) * 10;
+				sensitivity_x = PlayerPrefs.GetFloat("mouse_sensitivity", 1.0f) * 10;
+				sensitivity_y = PlayerPrefs.GetFloat("mouse_sensitivity", 1.0f) * 10;
 				if(PlayerPrefs.GetInt("mouse_invert", 0) == 1){
 						sensitivity_y = -Mathf.Abs(sensitivity_y);
 				} else {
@@ -1189,7 +1189,7 @@ private Quaternion flashlight_aim_rot;
 				flashlight_rot = held_flashlight.transform.rotation;
 
 				if(gun_instance){
-						flashlight_aim_pos = gun_instance.transform.position + gun_instance.transform.rotation*Vector3(0.07,-0.03,0.0);
+						flashlight_aim_pos = gun_instance.transform.position + gun_instance.transform.rotation*Vector3(0.07,-0.03,0.0f);
 						flashlight_aim_rot = gun_instance.transform.rotation;
 
 						flashlight_aim_pos -= main_camera.transform.position;
@@ -1205,7 +1205,7 @@ private Quaternion flashlight_aim_rot;
 						flashlight_rot = mix(flashlight_rot, main_camera.transform.rotation * flashlight_aim_rot, aim_spring.state);
 				} 
 
-				var flashlight_mouth_pos = main_camera.transform.position + main_camera.transform.rotation*Vector3(0.0,-0.08,0.05);
+				var flashlight_mouth_pos = main_camera.transform.position + main_camera.transform.rotation*Vector3(0.0f,-0.08,0.05);
 				var flashlight_mouth_rot = main_camera.transform.rotation;
 
 				flashlight_mouth_spring.target_state = 0;
@@ -1253,7 +1253,7 @@ private Quaternion flashlight_aim_rot;
 								hold_pos = mix(hold_pos, mag_ground_pos, mag_ground_pose_spring.state);
 								hold_rot = mix(hold_rot, mag_ground_rot, mag_ground_pose_spring.state);
 						}
-						if(hold_pose_spring.state != 1.0){ 
+						if(hold_pose_spring.state != 1.0f){ 
 								var amount = hold_pose_spring.state;
 								if(disable_springs){ 
 										amount = hold_pose_spring.target_state;
@@ -1277,7 +1277,7 @@ private Quaternion flashlight_aim_rot;
 						if(slot.type == WeaponSlotType.EMPTY){
 								continue;
 						}
-						slot.obj.transform.localScale = Vector3(1.0,1.0,1.0); 
+						slot.obj.transform.localScale = Vector3(1.0f,1.0f,1.0f); 
 				}
 				for(i=0; i<10; ++i){
 						slot = weapon_slots[i];
@@ -1298,7 +1298,7 @@ private Quaternion flashlight_aim_rot;
 						if(disable_springs){  
 								slot.obj.transform.position = mix(
 										start_pos, 
-										main_camera.transform.position + main_camera.GetComponent.<Camera>().ScreenPointToRay(Vector3(main_camera.GetComponent.<Camera>().pixelWidth * (0.05 + i*0.15), main_camera.GetComponent.<Camera>().pixelHeight * 0.17,0)).direction * 0.3, 
+										main_camera.transform.position + main_camera.GetComponent<Camera>().ScreenPointToRay(Vector3(main_camera.GetComponent<Camera>().pixelWidth * (0.05 + i*0.15), main_camera.GetComponent<Camera>().pixelHeight * 0.17,0)).direction * 0.3, 
 										slot.spring.target_state);
 								scale = 0.3 * slot.spring.target_state + (1.0 - slot.spring.target_state);
 								slot.obj.transform.localScale.x *= scale;
@@ -1311,7 +1311,7 @@ private Quaternion flashlight_aim_rot;
 						} else {  
 								slot.obj.transform.position = mix(
 										start_pos, 
-										main_camera.transform.position + main_camera.GetComponent.<Camera>().ScreenPointToRay(Vector3(main_camera.GetComponent.<Camera>().pixelWidth * (0.05 + i*0.15), main_camera.GetComponent.<Camera>().pixelHeight * 0.17,0)).direction * 0.3, 
+										main_camera.transform.position + main_camera.GetComponent<Camera>().ScreenPointToRay(Vector3(main_camera.GetComponent<Camera>().pixelWidth * (0.05 + i*0.15), main_camera.GetComponent<Camera>().pixelHeight * 0.17,0)).direction * 0.3, 
 										slot.spring.state);
 								scale = 0.3 * slot.spring.state + (1.0 - slot.spring.state);
 								slot.obj.transform.localScale.x *= scale;
@@ -1334,7 +1334,7 @@ private Quaternion flashlight_aim_rot;
 				var revolver_open = (gun_instance && gun_instance.GetComponent(GunScript).IsCylinderOpen());
 				if((mag_stage == HandMagStage.HOLD && !gun_instance) || picked_up_bullet_delay > 0.0 || revolver_open){
 						show_bullet_spring.target_state = 1;
-						picked_up_bullet_delay = Mathf.Max(0.0, picked_up_bullet_delay - Time.deltaTime);
+						picked_up_bullet_delay = Mathf.Max(0.0f, picked_up_bullet_delay - Time.deltaTime);
 				} else {	
 						show_bullet_spring.target_state = 0;
 				}
@@ -1344,9 +1344,9 @@ private Quaternion flashlight_aim_rot;
 						var spring : Spring = loose_bullet_spring[i];
 						spring.Update();
 						var bullet : GameObject = loose_bullets[i];
-						bullet.transform.position = main_camera.transform.position + main_camera.GetComponent.<Camera>().ScreenPointToRay(Vector3(0.0, main_camera.GetComponent.<Camera>().pixelHeight,0)).direction * 0.3;
+						bullet.transform.position = main_camera.transform.position + main_camera.GetComponent<Camera>().ScreenPointToRay(Vector3(0.0f, main_camera.GetComponent<Camera>().pixelHeight,0)).direction * 0.3;
 						bullet.transform.position += main_camera.transform.rotation * Vector3(0.02,-0.01,0);
-						bullet.transform.position += main_camera.transform.rotation * Vector3(0.006 * i,0.0,0);
+						bullet.transform.position += main_camera.transform.rotation * Vector3(0.006 * i,0.0f,0);
 						bullet.transform.position += main_camera.transform.rotation * Vector3(-0.03,0.03,0) * (1.0 - show_bullet_spring.state);
 						bullet.transform.localScale.x = spring.state;
 						bullet.transform.localScale.y = spring.state;
@@ -1384,10 +1384,10 @@ private Quaternion flashlight_aim_rot;
 						if(!round){
 								continue;
 						}
-						round.GetComponent.<Rigidbody>().velocity += (attract_pos - round.transform.position) * Time.deltaTime * 20;
-						round.GetComponent.<Rigidbody>().velocity *= Mathf.Pow(0.1, Time.deltaTime);;
+						round.GetComponent<Rigidbody>().velocity += (attract_pos - round.transform.position) * Time.deltaTime * 20;
+						round.GetComponent<Rigidbody>().velocity *= Mathf.Pow(0.1, Time.deltaTime);;
 						//round.rigidbody.position += round.rigidbody.velocity * Time.deltaTime;
-						if(Vector3.Distance(round.transform.position, attract_pos) < 0.5){
+						if(Vector3.Distance(round.transform.position, attract_pos) < 0.5f){
 								if(round.gameObject.name == "cassette_tape(Clone)"){
 										++unplayed_tapes;
 								} else {
@@ -1410,7 +1410,7 @@ private Quaternion flashlight_aim_rot;
 				UpdateLevelResetButton();
 				UpdateLevelChange();
 				UpdateLevelEndEffects();
-				AudioListener.volume = dead_volume_fade * PlayerPrefs.GetFloat("master_volume", 1.0);
+				AudioListener.volume = dead_volume_fade * PlayerPrefs.GetFloat("master_volume", 1.0f);
 				UpdateAimSpring();
 				UpdateCameraRotationControls();
 				UpdateCameraAndPlayerTransformation();	
@@ -1558,7 +1558,7 @@ private Quaternion flashlight_aim_rot;
 						}
 						if(gun_instance){
 								display_text.push(new DisplayLine("Fire weapon: tap [ left mouse button ]", false));
-								var should_aim = (aim_spring.state < 0.5);			
+								var should_aim = (aim_spring.state < 0.5f);			
 								display_text.push(new DisplayLine("Aim weapon: hold [ right mouse button ]", should_aim));
 								display_text.push(new DisplayLine("Aim weapon: tap [ q ]", should_aim));
 								display_text.push(new DisplayLine("Holster weapon: tap [ ~ ]", ShouldHolsterGun()));
@@ -1623,7 +1623,7 @@ private Quaternion flashlight_aim_rot;
 						if(show_advanced_help){
 								display_text.push(new DisplayLine("Advanced help:", false));
 								display_text.push(new DisplayLine("Toggle crouch: [ c ]", false));
-								if(aim_spring.state < 0.5){
+								if(aim_spring.state < 0.5f){
 										display_text.push(new DisplayLine("Run: tap repeatedly [ w ]", false));
 								}
 								if(gun_instance){
@@ -1646,7 +1646,7 @@ private Quaternion flashlight_aim_rot;
 						}
 				}
 				var style : GUIStyle = holder.gui_skin.label;
-				var width = Screen.width * 0.5;
+				var width = Screen.width * 0.5f;
 				var offset = 0;
 				for(var line : DisplayLine in display_text){
 						if(line.bold){
@@ -1656,7 +1656,7 @@ private Quaternion flashlight_aim_rot;
 						}
 						style.fontSize = 18;
 						style.normal.textColor = Color(0,0,0);
-						GUI.Label(Rect(width+0.5,offset+0.5,width+0.5,offset+20+0.5),line.str, style);
+						GUI.Label(Rect(width+0.5,offset+0.5,width+0.5,offset+20+0.5f),line.str, style);
 						if(line.bold){
 								style.normal.textColor = Color(1,1,1);
 						} else {
@@ -1665,7 +1665,7 @@ private Quaternion flashlight_aim_rot;
 						GUI.Label(Rect(width,offset,width,offset+30),line.str, style);
 						offset += 20;
 				}
-				if(dead_fade > 0.0){
+				if(dead_fade > 0.0f){
 						if(!texture_death_screen){
 								Debug.LogError("Assign a Texture in the inspector.");
 								return;
@@ -1673,7 +1673,7 @@ private Quaternion flashlight_aim_rot;
 						GUI.color = Color(0,0,0,dead_fade);
 						GUI.DrawTexture(Rect(0,0,Screen.width,Screen.height), texture_death_screen, ScaleMode.StretchToFill, true);
 				}
-				if(win_fade > 0.0){
+				if(win_fade > 0.0f){
 						GUI.color = Color(1,1,1,win_fade);
 						GUI.DrawTexture(Rect(0,0,Screen.width,Screen.height), texture_death_screen, ScaleMode.StretchToFill, true);
 				}
@@ -1862,7 +1862,7 @@ dead_body_fell = false;
 
 void  PlaySoundFromGroup ( Array group ,   float volume  ){
 FIXME_VAR_TYPE which_shot= Random.Range(0,group.length);
-GetComponent.<AudioSource>().PlayOneShot(group[which_shot], volume * PlayerPrefs.GetFloat("sound_volume", 1.0f));
+GetComponent<AudioSource>().PlayOneShot(group[which_shot], volume * PlayerPrefs.GetFloat("sound_volume", 1.0f));
 }
 
 void  AddLooseBullet ( bool spring  ){
@@ -1886,7 +1886,7 @@ casing_with_bullet = weapon_holder.bullet_object;
 
 if(Random.Range(0.0f,1.0f) < 0.35f){
 held_flashlight = Instantiate(holder.flashlight_object);
-Destroy(held_flashlight.GetComponent.<Rigidbody>());
+Destroy(held_flashlight.GetComponent<Rigidbody>());
 held_flashlight.GetComponent<FlashlightScript>().TurnOn();
 holder.has_flashlight = true;
 }
@@ -1987,11 +1987,11 @@ FIXME_VAR_TYPE nearest_mag= null;
 FIXME_VAR_TYPE nearest_mag_dist= 0.0f;
 FIXME_VAR_TYPE colliders= Physics.OverlapSphere(main_camera.transform.position, 2.0f, 1 << 8);
 foreach(var collider in colliders){
-if(magazine_obj && collider.gameObject.name == magazine_obj.name+"(Clone)" && collider.gameObject.GetComponent.<Rigidbody>()){
+if(magazine_obj && collider.gameObject.name == magazine_obj.name+"(Clone)" && collider.gameObject.GetComponent<Rigidbody>()){
 		if(mag_stage == HandMagStage.EMPTY){
 				return true;
 		}	
-} else if((collider.gameObject.name == casing_with_bullet.name || collider.gameObject.name == casing_with_bullet.name+"(Clone)") && collider.gameObject.GetComponent.<Rigidbody>()){
+} else if((collider.gameObject.name == casing_with_bullet.name || collider.gameObject.name == casing_with_bullet.name+"(Clone)") && collider.gameObject.GetComponent<Rigidbody>()){
 		return true;
 }
 }
@@ -2003,25 +2003,25 @@ FIXME_VAR_TYPE nearest_mag= null;
 FIXME_VAR_TYPE nearest_mag_dist= 0.0f;
 FIXME_VAR_TYPE colliders= Physics.OverlapSphere(main_camera.transform.position, 2.0f, 1 << 8);
 foreach(var collider in colliders){
-if(magazine_obj && collider.gameObject.name == magazine_obj.name+"(Clone)" && collider.gameObject.GetComponent.<Rigidbody>()){
+if(magazine_obj && collider.gameObject.name == magazine_obj.name+"(Clone)" && collider.gameObject.GetComponent<Rigidbody>()){
 		FIXME_VAR_TYPE dist= Vector3.Distance(collider.transform.position, main_camera.transform.position);
 		if(!nearest_mag || dist < nearest_mag_dist){	
 				nearest_mag_dist = dist;
 				nearest_mag = collider.gameObject;
 		}					
-} else if((collider.gameObject.name == casing_with_bullet.name || collider.gameObject.name == casing_with_bullet.name+"(Clone)") && collider.gameObject.GetComponent.<Rigidbody>()){
+} else if((collider.gameObject.name == casing_with_bullet.name || collider.gameObject.name == casing_with_bullet.name+"(Clone)") && collider.gameObject.GetComponent<Rigidbody>()){
 		collected_rounds.push(collider.gameObject);			
-		collider.gameObject.GetComponent.<Rigidbody>().useGravity = false;
-		collider.gameObject.GetComponent.<Rigidbody>().WakeUp();
+		collider.gameObject.GetComponent<Rigidbody>().useGravity = false;
+		collider.gameObject.GetComponent<Rigidbody>().WakeUp();
 		collider.enabled = false;
-} else if(collider.gameObject.name == "cassette_tape(Clone)" && collider.gameObject.GetComponent.<Rigidbody>()){
+} else if(collider.gameObject.name == "cassette_tape(Clone)" && collider.gameObject.GetComponent<Rigidbody>()){
 		collected_rounds.push(collider.gameObject);			
-		collider.gameObject.GetComponent.<Rigidbody>().useGravity = false;
-		collider.gameObject.GetComponent.<Rigidbody>().WakeUp();
+		collider.gameObject.GetComponent<Rigidbody>().useGravity = false;
+		collider.gameObject.GetComponent<Rigidbody>().WakeUp();
 		collider.enabled = false;
-} else if(collider.gameObject.name == "flashlight_object(Clone)" && collider.gameObject.GetComponent.<Rigidbody>() && !held_flashlight){
+} else if(collider.gameObject.name == "flashlight_object(Clone)" && collider.gameObject.GetComponent<Rigidbody>() && !held_flashlight){
 		held_flashlight = collider.gameObject;
-		Destroy(held_flashlight.GetComponent.<Rigidbody>());
+		Destroy(held_flashlight.GetComponent<Rigidbody>());
 		held_flashlight.GetComponent<FlashlightScript>().TurnOn();
 		holder.has_flashlight = true;
 		flash_ground_pos = held_flashlight.transform.position;
@@ -2032,7 +2032,7 @@ if(magazine_obj && collider.gameObject.name == magazine_obj.name+"(Clone)" && co
 }
 if(nearest_mag && mag_stage == HandMagStage.EMPTY){
 magazine_instance_in_hand = nearest_mag;
-Destroy(magazine_instance_in_hand.GetComponent.<Rigidbody>());
+Destroy(magazine_instance_in_hand.GetComponent<Rigidbody>());
 mag_ground_pos = magazine_instance_in_hand.transform.position;
 mag_ground_rot = magazine_instance_in_hand.transform.rotation;
 mag_ground_pose_spring.state = 1.0f;
@@ -2353,8 +2353,8 @@ if(Input.GetButtonDown("Eject/Drop") || queue_drop){
 if(mag_stage == HandMagStage.HOLD){
 		mag_stage = HandMagStage.EMPTY;
 		magazine_instance_in_hand.AddComponent<Rigidbody>();
-		magazine_instance_in_hand.GetComponent.<Rigidbody>().interpolation = RigidbodyInterpolation.Interpolate;
-		magazine_instance_in_hand.GetComponent.<Rigidbody>().velocity = character_controller.velocity;
+		magazine_instance_in_hand.GetComponent<Rigidbody>().interpolation = RigidbodyInterpolation.Interpolate;
+		magazine_instance_in_hand.GetComponent<Rigidbody>().velocity = character_controller.velocity;
 		magazine_instance_in_hand = null;
 		queue_drop = false;
 }
@@ -2405,7 +2405,7 @@ if(Time.timeScale == 1.0f){
 }
 
 void  StartTapePlay (){
-GetComponent.<AudioSource>().PlayOneShot(holder.sound_tape_start, 1.0f * PlayerPrefs.GetFloat("voice_volume", 1.0f));
+GetComponent<AudioSource>().PlayOneShot(holder.sound_tape_start, 1.0f * PlayerPrefs.GetFloat("voice_volume", 1.0f));
 audiosource_tape_background.Play();
 if(tape_in_progress && start_tape_delay == 0.0f){ 
 audiosource_audio_content.Play();
@@ -2424,7 +2424,7 @@ audiosource_audio_content.pitch = 0.1f;
 }
 
 void  StopTapePlay (){
-GetComponent.<AudioSource>().PlayOneShot(holder.sound_tape_end, 1.0f * PlayerPrefs.GetFloat("voice_volume", 1.0f));
+GetComponent<AudioSource>().PlayOneShot(holder.sound_tape_end, 1.0f * PlayerPrefs.GetFloat("voice_volume", 1.0f));
 if(tape_in_progress){
 audiosource_tape_background.Pause();
 audiosource_audio_content.Pause();
@@ -2906,7 +2906,7 @@ FIXME_VAR_TYPE scale= 0.0f;
 if(disable_springs){  
 		slot.obj.transform.position = mix(
 				start_pos, 
-				main_camera.transform.position + main_camera.GetComponent.<Camera>().ScreenPointToRay(Vector3(main_camera.GetComponent.<Camera>().pixelWidth * (0.05f + i*0.15f), main_camera.GetComponent.<Camera>().pixelHeight * 0.17f,0)).direction * 0.3f, 
+				main_camera.transform.position + main_camera.GetComponent<Camera>().ScreenPointToRay(Vector3(main_camera.GetComponent<Camera>().pixelWidth * (0.05f + i*0.15f), main_camera.GetComponent<Camera>().pixelHeight * 0.17f,0)).direction * 0.3f, 
 				slot.spring.target_state);
 		scale = 0.3f * slot.spring.target_state + (1.0f - slot.spring.target_state);
 		slot.obj.transform.localScale.x *= scale;
@@ -2919,7 +2919,7 @@ if(disable_springs){
 } else {  
 		slot.obj.transform.position = mix(
 				start_pos, 
-				main_camera.transform.position + main_camera.GetComponent.<Camera>().ScreenPointToRay(Vector3(main_camera.GetComponent.<Camera>().pixelWidth * (0.05f + i*0.15f), main_camera.GetComponent.<Camera>().pixelHeight * 0.17f,0)).direction * 0.3f, 
+				main_camera.transform.position + main_camera.GetComponent<Camera>().ScreenPointToRay(Vector3(main_camera.GetComponent<Camera>().pixelWidth * (0.05f + i*0.15f), main_camera.GetComponent<Camera>().pixelHeight * 0.17f,0)).direction * 0.3f, 
 				slot.spring.state);
 		scale = 0.3f * slot.spring.state + (1.0f - slot.spring.state);
 		slot.obj.transform.localScale.x *= scale;
@@ -2952,7 +2952,7 @@ for(FIXME_VAR_TYPE i=0; i<loose_bullets.length; ++i){
 Spring spring = loose_bullet_spring[i];
 spring.Update();
 GameObject bullet = loose_bullets[i];
-bullet.transform.position = main_camera.transform.position + main_camera.GetComponent.<Camera>().ScreenPointToRay(Vector3(0.0f, main_camera.GetComponent.<Camera>().pixelHeight,0)).direction * 0.3f;
+bullet.transform.position = main_camera.transform.position + main_camera.GetComponent<Camera>().ScreenPointToRay(Vector3(0.0f, main_camera.GetComponent<Camera>().pixelHeight,0)).direction * 0.3f;
 bullet.transform.position += main_camera.transform.rotation * Vector3(0.02f,-0.01f,0);
 bullet.transform.position += main_camera.transform.rotation * Vector3(0.006f * i,0.0f,0);
 bullet.transform.position += main_camera.transform.rotation * Vector3(-0.03f,0.03f,0) * (1.0f - show_bullet_spring.state);
@@ -2992,8 +2992,8 @@ FIXME_VAR_TYPE round= collected_rounds[i] as GameObject;
 if(!round){
 		continue;
 }
-round.GetComponent.<Rigidbody>().velocity += (attract_pos - round.transform.position) * Time.deltaTime * 20.0f;
-round.GetComponent.<Rigidbody>().velocity *= Mathf.Pow(0.1f, Time.deltaTime);;
+round.GetComponent<Rigidbody>().velocity += (attract_pos - round.transform.position) * Time.deltaTime * 20.0f;
+round.GetComponent<Rigidbody>().velocity *= Mathf.Pow(0.1f, Time.deltaTime);;
 //round.rigidbody.position += round.rigidbody.velocity * Time.deltaTime;
 if(Vector3.Distance(round.transform.position, attract_pos) < 0.5f){
 		if(round.gameObject.name == "cassette_tape(Clone)"){
