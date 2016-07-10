@@ -204,7 +204,7 @@ private Quaternion flashlight_aim_rot;
 				}
 		}
 
-		void FallDeath(Vector3 vel) {
+		public void FallDeath(Vector3 vel) {
 				if(!god_mode && !won){
 						SetDead(true);
 						head_fall_vel = vel.y;
@@ -1812,7 +1812,7 @@ if(dead && Random.Range(0.0f,1.0f) < 0.3f){
 }
 }
 
-void  FallDeath ( Vector3 vel  ){
+		public void  FallDeath ( Vector3 vel  ){
 if(!god_mode && !won){
 SetDead(true);
 head_fall_vel = vel.y;

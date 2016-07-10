@@ -18,20 +18,20 @@ public class CharacterMotor : MonoBehaviour {
 				bool  useFixedUpdate = true;
 
 		void  PlaySoundFromGroup (List<AudioClip> group, float volume){
-				AudioClip which_shot= Random.Range(0,group.length);
+				AudioClip which_shot= Random.Range(0,group.Count-1);
 						GetComponent<AudioSource>().PlayOneShot(group[which_shot], volume * PlayerPrefs.GetFloat("sound_volume", 1.0f));
 				}
 
-				// For the next variables, @System.NonSerialized tells Unity to not serialize the variable or show it in the inspector view.
+				// For the next variables, [System.NonSerialized] tells Unity to not serialize the variable or show it in the inspector view.
 				// Very handy for organization!
 
 				// The current global direction we want the character to move in.
-				@System.NonSerialized
+				[System.NonSerialized]
 				Vector3 inputMoveDirection = Vector3.zero;
 
 				// Is the jump button held down? We use this interface instead of checking
 				// for the jump button directly so this script can also be used by AIs.
-				@System.NonSerialized
+				[System.NonSerialized]
 				bool  inputJump = false;
 
 				void  SetRunning ( float val  ){
@@ -44,44 +44,40 @@ public class CharacterMotor : MonoBehaviour {
 
 				class CharacterMotorMovement {
 						// The maximum horizontal speed when moving
-						float maxForwardSpeed = 10.0f;
-						float maxSidewaysSpeed = 10.0f;
-						float maxBackwardsSpeed = 10.0f;
+						public float maxForwardSpeed = 10, maxSidewaysSpeed = 10, maxBackwardsSpeed = 10;
 
 						// Curve for multiplying speed based on slope (negative = downwards)
-						AnimationCurve slopeSpeedMultiplier = AnimationCurve(Keyframe(-90, 1), Keyframe(0, 1), Keyframe(90, 0));
+						public AnimationCurve slopeSpeedMultiplier = AnimationCurve(Keyframe(-90, 1), Keyframe(0, 1), Keyframe(90, 0));
 
 						// How fast does the character change speeds?  Higher is faster.
-						float maxGroundAcceleration = 30.0f;
-						float maxAirAcceleration = 20.0f;
+						public float maxGroundAcceleration = 30, maxAirAcceleration = 20;
 
 						// The gravity for the character
-						float gravity = 10.0f;
-						float maxFallSpeed = 20.0f;
+						public float gravity = 10, maxFallSpeed = 20;
 
-						// For the next variables, @System.NonSerialized tells Unity to not serialize the variable or show it in the inspector view.
+						// For the next variables, [System.NonSerialized] tells Unity to not serialize the variable or show it in the inspector view.
 						// Very handy for organization!
 
 						// The last collision flags returned from controller.Move
-						@System.NonSerialized
-						CollisionFlags collisionFlags; 
+						[System.NonSerialized]
+						public CollisionFlags collisionFlags; 
 
 						// We will keep track of the character's current velocity,
-						@System.NonSerialized
-						Vector3 velocity;
+						[System.NonSerialized]
+						public Vector3 velocity;
 
 						// This keeps track of our current velocity while we're not grounded
-						@System.NonSerialized
-						Vector3 frameVelocity = Vector3.zero;
+						[System.NonSerialized]
+				public Vector3 frameVelocity = Vector3.zero;
 
-						@System.NonSerialized
-						Vector3 hitPoint = Vector3.zero;
+						[System.NonSerialized]
+				public Vector3 hitPoint = Vector3.zero;
 
-						@System.NonSerialized
-						Vector3 lastHitPoint = Vector3(Mathf.Infinity, 0, 0);
+						[System.NonSerialized]
+				public Vector3 lastHitPoint = Vector3(Mathf.Infinity, 0, 0);
 				}
 
-				CharacterMotorMovement movement = CharacterMotorMovement();
+		CharacterMotorMovement movement = new CharacterMotorMovement();
 
 				enum MovementTransferOnJump {
 						None, // The jump is not affected by velocity of floor at all.
@@ -93,103 +89,103 @@ public class CharacterMotor : MonoBehaviour {
 				// We will contain all the jumping related variables in one helper class for clarity.
 				class CharacterMotorJumping {
 						// Can the character jump?
-						bool  enabled = true;
+				public bool  enabled = true;
 
 						// How high do we jump when pressing jump and letting go immediately
-						float baseHeight = 1.0f;
+				public float baseHeight = 1.0f;
 
 						// We add extraHeight units (meters) on top when holding the button down longer while jumping
-						float extraHeight = 4.1f;
+				public float extraHeight = 4.1f;
 
 						// How much does the character jump out perpendicular to the surface on walkable surfaces?
 						// 0 means a fully vertical jump and 1 means fully perpendicular.
-						float perpAmount = 0.0f;
+				public float perpAmount = 0.0f;
 
 						// How much does the character jump out perpendicular to the surface on too steep surfaces?
 						// 0 means a fully vertical jump and 1 means fully perpendicular.
-						float steepPerpAmount = 0.5f;
+				public 	float steepPerpAmount = 0.5f;
 
-						// For the next variables, @System.NonSerialized tells Unity to not serialize the variable or show it in the inspector view.
+						// For the next variables, [System.NonSerialized] tells Unity to not serialize the variable or show it in the inspector view.
 						// Very handy for organization!
 
 						// Are we jumping? (Initiated with jump button and not grounded yet)
 						// To see if we are just in the air (initiated by jumping OR falling) see the grounded variable.
-						@System.NonSerialized
-						bool  jumping = false;
+						[System.NonSerialized]
+				public 	bool  jumping = false;
 
-						@System.NonSerialized
-						bool  holdingJumpButton = false;
+						[System.NonSerialized]
+				public 	bool  holdingJumpButton = false;
 
 						// the time we jumped at (Used to determine for how long to apply extra jump power after jumping.)
-						@System.NonSerialized
-						float lastStartTime = 0.0f;
+						[System.NonSerialized]
+				public 	float lastStartTime = 0.0f;
 
-						@System.NonSerialized
-						float lastButtonDownTime = -100;
+						[System.NonSerialized]
+				public 	float lastButtonDownTime = -100;
 
-						@System.NonSerialized
-						Vector3 jumpDir = Vector3.up;
+						[System.NonSerialized]
+				public 	Vector3 jumpDir = Vector3.up;
 				}
 
-				CharacterMotorJumping jumping = CharacterMotorJumping();
+				CharacterMotorJumping jumping = new CharacterMotorJumping();
 
 				class CharacterMotorMovingPlatform {
-						bool  enabled = true;
+				public 	bool  enabled = true;
 
-						MovementTransferOnJump movementTransfer = MovementTransferOnJump.PermaTransfer;
+				public MovementTransferOnJump movementTransfer = MovementTransferOnJump.PermaTransfer;
 
-						@System.NonSerialized
-						Transform hitPlatform;
+						[System.NonSerialized]
+				public 	Transform hitPlatform;
 
-						@System.NonSerialized
-						Transform activePlatform;
+						[System.NonSerialized]
+				public 	Transform activePlatform;
 
-						@System.NonSerialized
-						Vector3 activeLocalPoint;
+						[System.NonSerialized]
+				public Vector3 activeLocalPoint;
 
-						@System.NonSerialized
-						Vector3 activeGlobalPoint;
+						[System.NonSerialized]
+				public 	Vector3 activeGlobalPoint;
 
-						@System.NonSerialized
-						Quaternion activeLocalRotation;
+						[System.NonSerialized]
+				public 	Quaternion activeLocalRotation;
 
-						@System.NonSerialized
-						Quaternion activeGlobalRotation;
+						[System.NonSerialized]
+				public Quaternion activeGlobalRotation;
 
-						@System.NonSerialized
-						Matrix4x4 lastMatrix;
+						[System.NonSerialized]
+				public Matrix4x4 lastMatrix;
 
-						@System.NonSerialized
-						Vector3 platformVelocity;
+						[System.NonSerialized]
+				public Vector3 platformVelocity;
 
-						@System.NonSerialized
-						bool  newPlatform;
+						[System.NonSerialized]
+				public bool  newPlatform;
 				}
 
-				CharacterMotorMovingPlatform movingPlatform = CharacterMotorMovingPlatform();
+		CharacterMotorMovingPlatform movingPlatform = new CharacterMotorMovingPlatform();
 
 				class CharacterMotorSliding {
 						// Does the character slide on too steep surfaces?
-						bool  enabled = true;
+				public bool  enabled = true;
 
 						// How fast does the character slide on steep surfaces?
-						float slidingSpeed = 15;
+				public float slidingSpeed = 15;
 
 						// How much can the player control the sliding direction?
 						// If the value is 0.5f the player can slide sideways with half the speed of the downwards sliding speed.
-						float sidewaysControl = 1.0f;
+				public float sidewaysControl = 1.0f;
 
 						// How much can the player influence the sliding speed?
 						// If the value is 0.5f the player can speed the sliding up to 150% or slow it down to 50%.
-						float speedControl = 0.4f;
+				public float speedControl = 0.4f;
 				}
 
-				CharacterMotorSliding sliding = CharacterMotorSliding();
-
-				@System.NonSerialized
+		CharacterMotorSliding sliding = new CharacterMotorSliding();
+		 
+				[System.NonSerialized]
 				bool  grounded = true;
 
-				@System.NonSerialized
+				[System.NonSerialized]
 				Vector3 groundNormal = Vector3.zero;
 
 				private Vector3 lastGroundNormal = Vector3.zero;
@@ -229,7 +225,7 @@ public class CharacterMotor : MonoBehaviour {
 								Quaternion newGlobalRotation = movingPlatform.activePlatform.rotation * movingPlatform.activeLocalRotation;
 								Quaternion rotationDiff = newGlobalRotation * Quaternion.Inverse(movingPlatform.activeGlobalRotation);
 
-								FIXME_VAR_TYPE yRotation= rotationDiff.eulerAngles.y;
+						float yRotation= rotationDiff.eulerAngles.y;
 								if (yRotation != 0) {
 										// Prevent rotation of the local up vector
 										tr.Rotate(0, yRotation, 0);
@@ -266,7 +262,7 @@ public class CharacterMotor : MonoBehaviour {
 								}
 						}
 
-						FIXME_VAR_TYPE old_vel= movement.velocity;
+				Vector3 old_vel= movement.velocity;
 
 						// Calculate the velocity based on the current and previous position.  
 						// This means our velocity will only be the amount the character actually moved as a result of collisions.
@@ -363,16 +359,16 @@ public class CharacterMotor : MonoBehaviour {
 								}
 						}
 
-						FIXME_VAR_TYPE controller= GetComponent (CharacterController);
+				CharacterController controller= GetComponent (CharacterController);
 						if(crouching && running == 0.0f){
 								height_spring.target_state = 0.5f + head_bob;
 						} else {
 								height_spring.target_state = 1.0f + head_bob;
 						}
 						height_spring.Update();
-						FIXME_VAR_TYPE old_height= controller.transform.localScale.y * controller.height;
+				float old_height = controller.transform.localScale.y * controller.height;
 						controller.transform.localScale.y = height_spring.state;
-						FIXME_VAR_TYPE height= controller.transform.localScale.y * controller.height;
+				float height= controller.transform.localScale.y * controller.height;
 						if(height > old_height){
 								controller.transform.position.y += height - old_height;
 						}
@@ -409,7 +405,7 @@ public class CharacterMotor : MonoBehaviour {
 								// The direction we're sliding in
 								desiredVelocity = Vector3(groundNormal.x, 0, groundNormal.z).normalized;
 								// Find the input movement direction projected onto the sliding direction
-								FIXME_VAR_TYPE projectedMoveDir= Vector3.Project(inputMoveDirection, desiredVelocity);
+						Vector3 projectedMoveDir= Vector3.Project(inputMoveDirection, desiredVelocity);
 								// Add the sliding direction, the spped control, and the sideways control vectors
 								desiredVelocity = desiredVelocity + projectedMoveDir * sliding.speedControl + (inputMoveDirection - projectedMoveDir) * sliding.sidewaysControl;
 								// Multiply with the sliding speed
@@ -420,15 +416,15 @@ public class CharacterMotor : MonoBehaviour {
 						}
 
 						if(grounded){
-								FIXME_VAR_TYPE kSoundVolumeMult= 0.8f;
-								FIXME_VAR_TYPE step_volume= movement.velocity.magnitude * 0.15f * kSoundVolumeMult;
+						float kSoundVolumeMult= 0.8f;
+						float step_volume = movement.velocity.magnitude * 0.15f * kSoundVolumeMult;
 								step_volume = Mathf.Clamp(step_volume, 0.0f,1.0f);
 								head_bob = (Mathf.Sin(step_timer * Mathf.PI) * 0.1f - 0.05f) * movement.velocity.magnitude * 0.5f;
 								if(running > 0.0f){
 										head_bob *= 2.0f;
 								}
 								if(velocity.magnitude > 0.01f){
-										FIXME_VAR_TYPE step_speed= movement.velocity.magnitude * 0.75f;
+								float step_speed= movement.velocity.magnitude * 0.75f;
 										if(movement.velocity.normalized.y > 0.1f){
 												step_speed += movement.velocity.normalized.y * 3.0f;
 										} else if(movement.velocity.normalized.y < -0.1f){
@@ -624,7 +620,7 @@ public class CharacterMotor : MonoBehaviour {
 						float maxSpeed = MaxSpeedInDirection(desiredLocalDirection);
 						if (grounded) {
 								// Modify max speed on slopes based on slope speed multiplier curve
-								FIXME_VAR_TYPE movementSlopeAngle= Mathf.Asin(movement.velocity.normalized.y)  * Mathf.Rad2Deg;
+						float movementSlopeAngle= Mathf.Asin(movement.velocity.normalized.y)  * Mathf.Rad2Deg;
 								maxSpeed *= movement.slopeSpeedMultiplier.Evaluate(movementSlopeAngle);
 						}
 						die_dir = tr.TransformDirection(desiredLocalDirection * maxSpeed);
@@ -703,6 +699,6 @@ public class CharacterMotor : MonoBehaviour {
 				}
 
 				// Require a character controller to be attached to the same game object
-				@script RequireComponent (CharacterController)
-				@script AddComponentMenu ("Character/Character Motor")
+		[RequireComponent (typeof (CharacterController))]
+		[AddComponentMenu ("Character/Character Motor")]
 }
