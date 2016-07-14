@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TaserSpark : MonoBehaviour {
+public class taser_spark : MonoBehaviour {
 
 		float opac= 0;
 		Component[] renderers, lights;

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class OptionsMenuScript : MonoBehaviour {
+public class optionsmenuscript : MonoBehaviour {
 
 		public GUISkin skin;
 		public Rect windowRect;

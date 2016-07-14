@@ -233,15 +233,15 @@ public class GunScript : MonoBehaviour {
 
 				}
 
-		MagScript MagScriptGet (){
-				return magazine_instance_in_gun.GetComponent<MagScript>();
+		mag_script MagScriptGet (){
+				return magazine_instance_in_gun.GetComponent<mag_script>();
 				}
 
 				public bool ShouldPullSlide (){
 						if(gun_type != GunType.AUTOMATIC){
 								return false;
 						}
-				return (!round_in_chamber && magazine_instance_in_gun && magazine_instance_in_gun.GetComponent<MagScript>().NumRounds()>0);
+				return (!round_in_chamber && magazine_instance_in_gun && magazine_instance_in_gun.GetComponent<mag_script>().NumRounds()>0);
 				}
 
 		public bool ShouldReleaseSlideLock (){
@@ -252,7 +252,7 @@ public class GunScript : MonoBehaviour {
 						if(gun_type != GunType.AUTOMATIC){
 								return false;
 						}
-				return (magazine_instance_in_gun && magazine_instance_in_gun.GetComponent<MagScript>().NumRounds() == 0);
+				return (magazine_instance_in_gun && magazine_instance_in_gun.GetComponent<mag_script>().NumRounds() == 0);
 				}
 
 				public bool  ChamberRoundFromMag (){

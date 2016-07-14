@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TapeScript : MonoBehaviour {
+public class tapescript : MonoBehaviour {
 
 		private float life_time= 0;
 		private Vector3 old_pos;

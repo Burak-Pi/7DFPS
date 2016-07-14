@@ -791,14 +791,14 @@ private Quaternion flashlight_aim_rot;
 				} else if(mag_stage == HandMagStage.HOLD){
 						if(Input.GetButtonDown("Insert")){
 								if(loose_bullets.Count > 0){
-										if(magazine_instance_in_hand.GetComponent<MagScript>().AddRound()){
+										if(magazine_instance_in_hand.GetComponent<mag_script>().AddRound()){
 												GameObject.Destroy(loose_bullets[loose_bullets.Count-1],0);
 														loose_bullet_spring.RemoveAt(loose_bullet_spring.Count-1);
 										}
 								}
 						}
 						if(Input.GetButtonDown("Pull Back Slide")){
-								if(magazine_instance_in_hand.GetComponent<MagScript>().RemoveRoundAnimated()){
+								if(magazine_instance_in_hand.GetComponent<mag_script>().RemoveRoundAnimated()){
 										AddLooseBullet(true);
 										PlaySoundFromGroup(sound_bullet_grab, 0.2f);
 								}
@@ -1110,7 +1110,7 @@ private Quaternion flashlight_aim_rot;
 						sensitivity_y = Mathf.Abs(sensitivity_y);
 				}
 
-				bool in_menu = GameObject.Find("gui_skin_holder").GetComponent<OptionsMenuScript>().IsMenuShown();
+				bool in_menu = GameObject.Find("gui_skin_holder").GetComponent<optionsmenuscript>().IsMenuShown();
 				if(!dead && !in_menu){
 						rotation_x += Input.GetAxis("Mouse X") * sensitivity_x;
 						rotation_y += Input.GetAxis("Mouse Y") * sensitivity_y;
@@ -1263,7 +1263,7 @@ private Quaternion flashlight_aim_rot;
 								gun_instance.transform.FindChild("point_mag_inserted").position);
 				}
 				if(mag_stage == HandMagStage.HOLD || mag_stage == HandMagStage.HOLD_TO_INSERT){
-						MagScript mag_script = magazine_instance_in_hand.GetComponent<MagScript>();
+						mag_script mag_script = magazine_instance_in_hand.GetComponent<mag_script>();
 						Vector3 hold_pos = main_camera.transform.position + main_camera.transform.rotation*mag_script.hold_offset;
 						Quaternion hold_rot = main_camera.transform.rotation * Quaternion.AngleAxis(mag_script.hold_rotation.x, Quaternion.AngleAxis(mag_script.hold_rotation.y, Vector3.right) * Vector3.up);
 						if(disable_springs){ 
@@ -1439,7 +1439,7 @@ private Quaternion flashlight_aim_rot;
 				}
 				UpdateInventoryTransformation();
 				UpdateLooseBulletDisplay();
-				bool in_menu = GameObject.Find("gui_skin_holder").GetComponent<OptionsMenuScript>().IsMenuShown();
+				bool in_menu = GameObject.Find("gui_skin_holder").GetComponent<optionsmenuscript>().IsMenuShown();
 				if(!dead && !in_menu){
 						HandleControls();
 				}
@@ -1464,17 +1464,17 @@ private Quaternion flashlight_aim_rot;
 				} else return false;
 				if(magazine_instance_in_hand){
 				} else return false;
-				if(magazine_instance_in_hand.GetComponent<MagScript>().NumRounds() == 0){
+				if(magazine_instance_in_hand.GetComponent<mag_script>().NumRounds() == 0){
 				} else return false;
 				return true;
 		}
 
 		bool CanLoadBulletsInMag(){
-				return !gun_instance && mag_stage == HandMagStage.HOLD && loose_bullets.Count > 0 && !magazine_instance_in_hand.GetComponent<MagScript>().IsFull();
+				return !gun_instance && mag_stage == HandMagStage.HOLD && loose_bullets.Count > 0 && !magazine_instance_in_hand.GetComponent<mag_script>().IsFull();
 		}
 
 		bool CanRemoveBulletFromMag() {
-				return !gun_instance && mag_stage == HandMagStage.HOLD && magazine_instance_in_hand.GetComponent<MagScript>().NumRounds() > 0;
+				return !gun_instance && mag_stage == HandMagStage.HOLD && magazine_instance_in_hand.GetComponent<mag_script>().NumRounds() > 0;
 		}
 
 		bool ShouldDrawWeapon(){
@@ -1486,7 +1486,7 @@ private Quaternion flashlight_aim_rot;
 				var max_rounds_slot = -1;
 				for(var i=0; i<10; ++i){
 						if(weapon_slots[i].type == WeaponSlotType.MAGAZINE){
-								var rounds = weapon_slots[i].obj.GetComponent<MagScript>().NumRounds();
+								var rounds = weapon_slots[i].obj.GetComponent<mag_script>().NumRounds();
 								if(rounds > max_rounds){
 										max_rounds_slot = i+1;
 										max_rounds = rounds;
@@ -1497,12 +1497,12 @@ private Quaternion flashlight_aim_rot;
 		}
 
 		bool ShouldPutMagInInventory() {
-				var rounds = magazine_instance_in_hand.GetComponent<MagScript>().NumRounds();
+				var rounds = magazine_instance_in_hand.GetComponent<mag_script>().NumRounds();
 				var most_loaded = GetMostLoadedMag();
 				if(most_loaded == -1){
 						return false;
 				}
-				if(weapon_slots[most_loaded-1].obj.GetComponent<MagScript>().NumRounds() > rounds){
+				if(weapon_slots[most_loaded-1].obj.GetComponent<mag_script>().NumRounds() > rounds){
 						return true;
 				}
 				return false;
@@ -1601,7 +1601,7 @@ private Quaternion flashlight_aim_rot;
 										display_text.Add(new DisplayLine("Spin cylinder: [ mousewheel ]", false));
 								}
 								if(mag_stage == HandMagStage.HOLD && !gun_script.IsThereAMagInGun()){
-										var should_insert_mag = (magazine_instance_in_hand.GetComponent<MagScript>().NumRounds() >= 1);
+										var should_insert_mag = (magazine_instance_in_hand.GetComponent<mag_script>().NumRounds() >= 1);
 										display_text.Add(new DisplayLine("Insert magazine: tap [ z ]", should_insert_mag));
 								} else if(mag_stage == HandMagStage.EMPTY && gun_script.IsThereAMagInGun()){
 										display_text.Add(new DisplayLine("Eject magazine: tap [ e ]", gun_script.ShouldEjectMag()?true:false));

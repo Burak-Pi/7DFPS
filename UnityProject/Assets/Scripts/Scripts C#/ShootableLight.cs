@@ -12,12 +12,6 @@ public class ShootableLight : MonoBehaviour {
 		public enum LightType {
 			AIRPLANE_BLINK, NORMAL, FLICKER
 		}
-
-
-
-		void Start () {
-				print("Worlking");
-	}
 	
 	void Update () {
 				if(!destroyed){

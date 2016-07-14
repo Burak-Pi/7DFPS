@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlasterPuffScript : MonoBehaviour {
+public class plasterpuffscript : MonoBehaviour {
 
 		float opac = 0;
 		Component[] renderers, lights;

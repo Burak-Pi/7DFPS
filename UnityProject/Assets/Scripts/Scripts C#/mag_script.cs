@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MagScript : MonoBehaviour {
+public class mag_script : MonoBehaviour {
 
 		private int num_rounds = 8;
 		int kMaxRounds = 8;

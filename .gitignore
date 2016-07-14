@@ -2,6 +2,7 @@ UnityProject/Temp/*
 UnityProject/Library/cache/*
 UnityProject/Library/previews/*
 UnityProject/Library/ScriptAssemblies/*
+UnityProject/Library/ShaderCache*
 *.suo
 *.user
 *.pidb

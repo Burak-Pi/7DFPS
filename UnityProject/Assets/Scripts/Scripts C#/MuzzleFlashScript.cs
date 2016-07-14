@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MuzzleFlashScript : MonoBehaviour {
+public class muzzleflashscript : MonoBehaviour {
 
 		float opac = 0;
 		Component[] renderers, lights;

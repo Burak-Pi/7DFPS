@@ -99,7 +99,7 @@ class AntialiasingAsPostEffect extends PostEffectsBase  {
     function OnDisable()
     {
 		if(materialFXAAPreset2)
-		    Destroy(materialFXAAPreset2);
+		    Destroy(materialFXAAPreset2,0);
 		if(materialFXAAPreset3)
     		Destroy(materialFXAAPreset3);
 		if(materialFXAAII)

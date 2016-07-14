@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ElectricSparkScript : MonoBehaviour {
+public class electricsparkscript  : MonoBehaviour {
 
 		float opac = 0;
 		Component[] renderers, lights;

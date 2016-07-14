@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SparkEffect : MonoBehaviour {
+public class sparkeffect : MonoBehaviour {
 
 				float opac= 0;
 		Component[] renderers, lights;
 		Color color;
 				void  UpdateColor (){
-						 renderers= transform.GetComponentsInChildren<MeshRenderer>();
-						 color= new Vector4(opac,opac,opac,opac);
+						renderers= transform.GetComponentsInChildren<MeshRenderer>();
+						color= new Vector4(opac,opac,opac,opac);
 						foreach(MeshRenderer renderer in renderers){
 								renderer.material.SetColor("_TintColor", color);
 						}

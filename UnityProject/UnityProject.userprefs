@@ -1,16 +1,14 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Scripts C#/AimScript.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Editor/FindScritps.cs">
     <Files>
-      <File FileName="Assets/Scripts/AimScript.js" Line="1672" Column="15" />
-      <File FileName="Assets/Scripts/CharacterMotor.js" Line="691" Column="17" />
-      <File FileName="Assets/Scripts/GunScript.js" Line="1097" Column="2" />
-      <File FileName="Assets/Scripts/Scripts C#/CharacterMotor.cs" Line="29" Column="1" />
-      <File FileName="Assets/Scripts/Scripts C#/AimScript.cs" Line="25" Column="3" />
+      <File FileName="Assets/Editor/FindScritps.cs" Line="31" Column="45" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/admin/Desktop/Steven/SimonShared/ReceiverGIT/UnityProject/Assets/Scripts/Scripts C#/RobotScript.cs" line="23" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
