@@ -6,8 +6,8 @@ using System.Collections;
 public class PlatformInputController : MonoBehaviour {
 
 		// This makes the character turn to face the current movement speed per default.
-		bool autoRotate = true;
-		float maxRotationSpeed = 360, directionLength;
+		public bool autoRotate = true;
+		public float maxRotationSpeed = 360, directionLength;
 		private CharacterMotor motor;
 		Vector3 directionVector, newForward;
 		Quaternion camToCharacterSpace;

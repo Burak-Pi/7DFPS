@@ -3,9 +3,10 @@ using System.Collections;
 
 public class ShootableLight : MonoBehaviour {
 
+		public GameObject destroy_effect;
 
-		bool destroyed;
-		Color light_color = new Color(1,1,1);
+		public Color light_color = new Color(1,1,1);
+		public bool destroyed;
 		public LightType light_type = LightType.NORMAL;
 		private float blink_delay = 0, light_amount = 1;
 		Color combined_color;
@@ -43,12 +44,11 @@ public class ShootableLight : MonoBehaviour {
 	}
 
 
-
 		public void WasShot(GameObject obj, Vector3 pos, Vector3 vel) {
 				if(!destroyed){
 						destroyed = true;
 						light_amount = 0;
-						Instantiate(References.thisReferences.destroy_effect, transform.FindChild("bulb").position, Quaternion.identity);
+						Instantiate(destroy_effect, transform.FindChild("bulb").position, Quaternion.identity);
 				}
 				if(obj && obj.GetComponent<Collider>() && obj.GetComponent<Collider>().material.name == "glass (Instance)"){
 						GameObject.Destroy(obj);

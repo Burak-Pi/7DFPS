@@ -3,11 +3,11 @@ using System.Collections;
 
 public class MusicScript : MonoBehaviour {
 
-		AudioClip[] music_layers;
+		public AudioClip[] music_layers;
 		private AudioSource[] music_sources;
 		private float[] music_volume;
 		private AudioSource sting_source;
-		AudioClip death_sting, win_sting;
+		public AudioClip death_sting, win_sting;
 		private float[] target_gain;
 		private float danger = 0, global_gain = 1, target_global_gain = 1
 				, gain_recover_delay = 0, danger_level_accumulate = 0,  mystical = 0;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class LevelCreatorScript : MonoBehaviour {
 
-		GameObject[] level_tiles;
+		public GameObject[] level_tiles;
 		List<Light> shadowed_lights = new List<Light>();
 		List<int> tiles = new List<int>();
 		GameObject child_obj;

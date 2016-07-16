@@ -57,5 +57,4 @@ function FixedUpdate() {
 }
 
 // Require a character controller to be attached to the same game object
-@script RequireComponent (CharacterMotor)
 @script AddComponentMenu ("Character/FPS Input Controller")

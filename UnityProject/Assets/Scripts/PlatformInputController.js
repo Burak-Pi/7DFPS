@@ -64,5 +64,4 @@ function ConstantSlerp (from : Vector3, to : Vector3, angle : float) {
 }
 
 // Require a character controller to be attached to the same game object
-@script RequireComponent (CharacterMotor)
 @script AddComponentMenu ("Character/Platform Input Controller")

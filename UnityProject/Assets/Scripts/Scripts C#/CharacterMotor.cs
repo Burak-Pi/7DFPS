@@ -8,18 +8,19 @@ using System.Collections.Generic;
 
 public class CharacterMotor : MonoBehaviour {
 
-		private float kStandHeight= 2, kCrouchHeight= 1, step_timer= 0, head_bob= 0, running= 0;
+		private float kStandHeight= 2, kCrouchHeight= 1, step_timer= 0, head_bob= 0;
 		private bool crouching= false;
 
 		public AudioClip[] sound_footstep_jump_concrete, sound_footstep_run_concrete, sound_footstep_walk_concrete, sound_footstep_crouchwalk_concrete;
+		public float running= 0;
 
 		public AimScript.Spring height_spring= new AimScript.Spring(0,0,100,0.00001f);
-				Vector3 die_dir;
+		public Vector3 die_dir;
 
 				// Does this script currently respond to input?
-				bool  canControl = true;
+		public 	bool  canControl = true;
 
-				bool  useFixedUpdate = true;
+		public 	bool  useFixedUpdate = true;
 
 		public void  PlaySoundFromGroup (AudioClip[] group, float volume){
 				int which_shot= Random.Range(0,group.Length);
@@ -46,7 +47,7 @@ public class CharacterMotor : MonoBehaviour {
 						return running;
 				}
 
-				class CharacterMotorMovement {
+		public class CharacterMotorMovement {
 						// The maximum horizontal speed when moving
 						public float maxForwardSpeed = 10, maxSidewaysSpeed = 10, maxBackwardsSpeed = 10;
 
@@ -81,9 +82,9 @@ public class CharacterMotor : MonoBehaviour {
 				public Vector3 lastHitPoint = new Vector3(Mathf.Infinity, 0, 0);
 				}
 
-		CharacterMotorMovement movement = new CharacterMotorMovement();
+		public CharacterMotorMovement movement = new CharacterMotorMovement();
 
-				enum MovementTransferOnJump {
+		public enum MovementTransferOnJump {
 						None, // The jump is not affected by velocity of floor at all.
 						InitTransfer, // Jump gets its initial velocity from the floor, then gradualy comes to a stop.
 						PermaTransfer, // Jump gets its initial velocity from the floor, and keeps that velocity until landing.
@@ -91,7 +92,7 @@ public class CharacterMotor : MonoBehaviour {
 				}
 
 				// We will contain all the jumping related variables in one helper class for clarity.
-				class CharacterMotorJumping {
+		public class CharacterMotorJumping {
 						// Can the character jump?
 				public bool  enabled = true;
 
@@ -131,9 +132,9 @@ public class CharacterMotor : MonoBehaviour {
 				public 	Vector3 jumpDir = Vector3.up;
 				}
 
-				CharacterMotorJumping jumping = new CharacterMotorJumping();
+		public 	CharacterMotorJumping jumping = new CharacterMotorJumping();
 
-				class CharacterMotorMovingPlatform {
+		public class CharacterMotorMovingPlatform {
 				public 	bool  enabled = true;
 
 				public MovementTransferOnJump movementTransfer = MovementTransferOnJump.PermaTransfer;
@@ -166,9 +167,9 @@ public class CharacterMotor : MonoBehaviour {
 				public bool  newPlatform;
 				}
 
-		CharacterMotorMovingPlatform movingPlatform = new CharacterMotorMovingPlatform();
+		public CharacterMotorMovingPlatform movingPlatform = new CharacterMotorMovingPlatform();
 
-				class CharacterMotorSliding {
+		public class CharacterMotorSliding {
 						// Does the character slide on too steep surfaces?
 				public bool  enabled = true;
 
@@ -184,7 +185,7 @@ public class CharacterMotor : MonoBehaviour {
 				public float speedControl = 0.4f;
 				}
 
-		CharacterMotorSliding sliding = new CharacterMotorSliding();
+		public CharacterMotorSliding sliding = new CharacterMotorSliding();
 		 
 				[System.NonSerialized]
 				bool  grounded = true;

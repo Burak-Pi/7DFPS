@@ -3,8 +3,8 @@ using System.Collections;
 
 public class FlashlightScript : MonoBehaviour {
 
-		AnimationCurve battery_curve;
-		AudioClip sound_turn_on, sound_turn_off;
+		public AnimationCurve battery_curve;
+		public AudioClip sound_turn_on, sound_turn_off;
 		private float kSoundVolume = 0.3f, max_battery_life = 60*60*5.5f, battery_life_remaining = 60*60*5.5f;
 		private bool switch_on;
 

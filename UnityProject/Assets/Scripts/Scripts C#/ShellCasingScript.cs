@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 public class ShellCasingScript : MonoBehaviour {
 
-				AudioClip[] sound_shell_bounce;
+				public AudioClip[] sound_shell_bounce;
 				public bool collided = false;
-				Vector3 old_pos;
-		float life_time= 0.0f, glint_delay= 0, glint_progress= 0;
+				public Vector3 old_pos;
+		public float life_time= 0.0f, glint_delay= 0, glint_progress= 0;
 				private Light glint_light;
 
 		void  PlaySoundFromGroup (AudioClip[] group, float volume){

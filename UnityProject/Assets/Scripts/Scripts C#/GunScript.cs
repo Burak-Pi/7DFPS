@@ -19,21 +19,21 @@ public class GunScript : MonoBehaviour {
 				public bool  add_head_recoil;
 				public float recoil_transfer_x= 0, recoil_transfer_y= 0, rotation_transfer_x= 0, rotation_transfer_y= 0;
 
-				Vector3 old_pos;
-				Vector3 velocity;
+		public 	Vector3 old_pos;
+		public Vector3 velocity;
 
-				GameObject magazine_obj;
+		public GameObject magazine_obj;
 
-				GameObject bullet_obj;
-				GameObject muzzle_flash;
+		public GameObject bullet_obj;
+		public GameObject muzzle_flash;
 
-				GameObject shell_casing;
-				GameObject casing_with_bullet;
+		public GameObject shell_casing;
+		public GameObject casing_with_bullet;
 				public bool  ready_to_remove_mag;
 
-				enum PressureState {NONE, INITIAL, CONTINUING};
-		PressureState pressure_on_trigger= PressureState.NONE;
-		float trigger_pressed= 0.0f;
+		public enum PressureState {NONE, INITIAL, CONTINUING};
+		public PressureState pressure_on_trigger= PressureState.NONE;
+		public float trigger_pressed= 0.0f;
 
 				private GameObject round_in_chamber;
 				enum RoundState {EMPTY, READY, FIRED, LOADING, JAMMED};
@@ -42,10 +42,10 @@ public class GunScript : MonoBehaviour {
 				private GameObject magazine_instance_in_gun;
 		private float mag_offset= 0.0f;
 
-				 public bool  slide_pressure;
+				  bool  slide_pressure;
 				private Vector3 slide_rel_pos;
 		private float slide_amount= 0.0f;
-		 public bool  slide_lock;
+		 bool  slide_lock;
 				enum SlideStage {NOTHING, PULLBACK, HOLD};
 				private SlideStage slide_stage = SlideStage.NOTHING;
 
@@ -72,9 +72,9 @@ public class GunScript : MonoBehaviour {
 				private AutoModStage auto_mod_stage = AutoModStage.DISABLED;
 		private float auto_mod_amount= 0.0f;
 				private Vector3 auto_mod_rel_pos;
-		public bool  fired_once_this_pull;
+		bool  fired_once_this_pull;
 
-				public bool  has_slide, has_safety, has_hammer, has_auto_mod;
+				bool  has_slide, has_safety, has_hammer, has_auto_mod;
 
 				private Quaternion yolk_pivot_rel_rot;
 		private float yolk_open= 0.0f;
@@ -86,13 +86,13 @@ public class GunScript : MonoBehaviour {
 				enum ExtractorRodStage {CLOSED, OPENING, OPEN, CLOSING};
 		private ExtractorRodStage extractor_rod_stage= ExtractorRodStage.CLOSED;
 		private float extractor_rod_amount= 0.0f;
-		public bool  extracted;
+		bool  extracted;
 				private Vector3 extractor_rod_rel_pos;
 				public bool  disable_springs;
 
 		Component[] renderers, lights;
 
-				class CylinderState {
+		public class CylinderState {
 				public GameObject obj = null;
 						public bool   can_fire = false;
 				public float seated = 0.0f;
@@ -100,7 +100,7 @@ public class GunScript : MonoBehaviour {
 				};
 
 				private int cylinder_capacity= 6;
-				CylinderState[] cylinders;
+				public CylinderState[] cylinders;
 
 				public bool  IsAddingRounds (){
 						if(yolk_stage == YolkStage.OPEN){
@@ -134,7 +134,7 @@ public class GunScript : MonoBehaviour {
 						return hammer;
 				}
 
-		public Transform extractor_rod;
+		Transform extractor_rod;
 				public void Start (){
 						disable_springs = false;
 						if(transform.FindChild("slide")){
@@ -172,7 +172,8 @@ public class GunScript : MonoBehaviour {
 						}
 
 						if(gun_type == GunType.AUTOMATIC){
-								magazine_instance_in_gun = Instantiate(magazine_obj);
+						print("This " + magazine_obj.name);
+						magazine_instance_in_gun = Instantiate(magazine_obj) as GameObject;
 								magazine_instance_in_gun.transform.parent = transform;
 
 								renderers = magazine_instance_in_gun.GetComponentsInChildren<Renderer>();

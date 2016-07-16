@@ -5,18 +5,18 @@ using System.Collections.Generic;
 public class RobotScript : MonoBehaviour {
 
 
-		AudioClip[] sound_gunshot,_damage_camera, sound_damage_gun,  sound_damage_battery, sound_damage_camera
+		public AudioClip[] sound_gunshot,_damage_camera, sound_damage_gun,  sound_damage_battery, sound_damage_camera
 		, sound_damage_ammo, sound_damage_motor, sound_bump;
-		AudioClip sound_alert, sound_unalert, sound_engine_loop, sound_damaged_engine_loop;
+		public AudioClip sound_alert, sound_unalert, sound_engine_loop, sound_damaged_engine_loop;
 
 		private AudioSource audiosource_taser, audiosource_motor,  audiosource_effect, audiosource_foley;
 		private GameObject object_audiosource_motor;
 		private float sound_line_of_sight = 0;
 
-		GameObject electric_spark_obj, muzzle_flash, bullet_obj;
+		public GameObject electric_spark_obj, muzzle_flash, bullet_obj;
 
-		enum RobotType {SHOCK_DRONE, STATIONARY_TURRET, MOBILE_TURRET, GUN_DRONE};
-		RobotType robot_type;
+		public enum RobotType {SHOCK_DRONE, STATIONARY_TURRET, MOBILE_TURRET, GUN_DRONE};
+		public 	RobotType robot_type;
 
 		private float gun_delay = 0;
 		private bool alive = true;
@@ -35,10 +35,10 @@ public class RobotScript : MonoBehaviour {
 				, bottom_rotor_rotation = 0, stuck_delay = 0, kSleepDistance = 20;
 		private Vector3 initial_pos, tilt_correction;
 
-		Vector3 target_pos;
-		enum CameraPivotState {DOWN, WAIT_UP, UP, WAIT_DOWN};
-		CameraPivotState camera_pivot_state = CameraPivotState.WAIT_DOWN;
-		float camera_pivot_delay = 0, camera_pivot_angle = 0;
+		public Vector3 target_pos;
+		public enum CameraPivotState {DOWN, WAIT_UP, UP, WAIT_DOWN};
+		public CameraPivotState camera_pivot_state = CameraPivotState.WAIT_DOWN;
+		public float camera_pivot_delay = 0, camera_pivot_angle = 0;
 
 		void PlaySoundFromGroup(AudioClip[] group,float volume){
 				if (group == null) {

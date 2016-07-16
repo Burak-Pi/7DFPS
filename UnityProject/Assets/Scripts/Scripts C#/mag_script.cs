@@ -8,11 +8,11 @@ public class mag_script : MonoBehaviour {
 		private Vector3[] round_pos;
 		public  Vector3 old_pos, hold_offset, hold_rotation;
 		private Quaternion[] round_rot;
-		bool collided, disable_interp = true;
-		AudioClip[] sound_add_round, sound_mag_bounce;
-		float life_time = 0, mag_load_progress = 0;
-		enum MagLoadStage {NONE, PUSHING_DOWN, ADDING_ROUND, REMOVING_ROUND, PUSHING_UP};
-		MagLoadStage mag_load_stage = MagLoadStage.NONE;
+		public bool collided, disable_interp = true;
+		public AudioClip[] sound_add_round, sound_mag_bounce;
+		public float life_time = 0, mag_load_progress = 0;
+		public enum MagLoadStage {NONE, PUSHING_DOWN, ADDING_ROUND, REMOVING_ROUND, PUSHING_UP};
+		public 	MagLoadStage mag_load_stage = MagLoadStage.NONE;
 
 		public bool RemoveRound() {
 				if(num_rounds == 0){

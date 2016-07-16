@@ -5,12 +5,13 @@ using System.Collections.Generic;
 public class AimScript : MonoBehaviour {
 // Prefabs 
 
-private  GameObject magazine_obj, gun_obj, casing_with_bullet;
-Texture texture_death_screen;
+private  GameObject gun_obj, casing_with_bullet;
+		private GameObject magazine_obj;
+		public Texture texture_death_screen;
 
-AudioClip[] sound_bullet_grab, sound_body_fall, sound_electrocute;
+		public AudioClip[] sound_bullet_grab, sound_body_fall, sound_electrocute;
 
-AudioSource audiosource_tape_background, audiosource_audio_content;
+		public AudioSource audiosource_tape_background, audiosource_audio_content;
 
 // Shortcuts to components
 
@@ -32,7 +33,7 @@ private GUISkinHolder holder;
 private WeaponHolder weapon_holder;
 
 //bools are by default false
-bool disable_springs, disable_recoil = true;
+public bool disable_springs, disable_recoil = true;
 
 // Private variables
 
@@ -66,7 +67,7 @@ private bool aim_toggle= false;
 private float kAimSpringStrength= 100.0f;
 		private float kAimSpringDamping= 0.00001f;
 		private Spring aim_spring; 
-
+		public static AimScript thisInstance;
 private GameObject held_flashlight = null;
 private Vector3 flashlight_aim_pos;
 private Quaternion flashlight_aim_rot;
@@ -287,13 +288,15 @@ private Quaternion flashlight_aim_rot;
 
 
 		Component[] renderers, lights;
-		void Start() { 
+		void Awake() { 
+				thisInstance=this;
 				FieldInitialisers();
 				disable_springs = false; 
 				disable_recoil = true;
 				holder = GameObject.Find("gui_skin_holder").GetComponent<GUISkinHolder>();
 				weapon_holder = holder.weapon.GetComponent<WeaponHolder>();
 				magazine_obj = weapon_holder.mag_object;
+				print("HOLDER IS " + magazine_obj.name);
 				gun_obj = weapon_holder.gun_object;
 				casing_with_bullet = weapon_holder.bullet_object;
 

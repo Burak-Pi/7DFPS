@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public class BulletScript : MonoBehaviour {
 
-		AudioClip[] sound_hit_concrete, sound_hit_metal, sound_hit_glass, sound_hit_body, sound_hit_ricochet, sound_glass_break, sound_flyby;
+		public AudioClip[] sound_hit_concrete, sound_hit_metal, sound_hit_glass, sound_hit_body, sound_hit_ricochet, sound_glass_break, sound_flyby;
 
-		GameObject bullet_obj, bullet_hole_obj, glass_bullet_hole_obj, metal_bullet_hole_obj, spark_effect, puff_effect;
+		public GameObject bullet_obj, bullet_hole_obj, glass_bullet_hole_obj, metal_bullet_hole_obj, spark_effect, puff_effect;
 		private Vector3 old_pos, velocity;
 		private bool hit_something, hostile = false;
 		private LineRenderer line_renderer; 
