@@ -86,6 +86,7 @@
      <Compile Include="Assets\Scripts\Scripts C#\optionsmenuscript.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\plasterpuffscript.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\sparkeffect.cs" />
+     <Compile Include="Assets\Scripts\Scripts C#\splashscript.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\tapescript.cs" />
      <Compile Include="Assets\Scripts\Scripts C#\taser_spark.cs" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlendOneOne.shader" />

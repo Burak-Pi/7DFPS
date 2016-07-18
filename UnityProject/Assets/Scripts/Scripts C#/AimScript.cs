@@ -1061,7 +1061,7 @@ private Quaternion flashlight_aim_rot;
 
 		void UpdateLevelChange() {
 				if((dead && dead_volume_fade <= 0.0f)){ 
-						UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().ToString());
+						UnityEngine.SceneManagement.SceneManager.LoadScene(1);
 				}
 				if(won && dead_volume_fade <= 0.0f){ 
 						UnityEngine.SceneManagement.SceneManager.LoadScene("winscene");
